@@ -9,7 +9,7 @@ import lombok.Data;
 public class Sport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
     private String name;
     private String iconUrl;
 }

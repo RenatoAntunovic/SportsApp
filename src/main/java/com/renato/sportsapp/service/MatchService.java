@@ -23,7 +23,7 @@ public class MatchService {
     }
 
     public List<Match> getByTeam(Long teamId){
-        return matchRepository.findByHomeTeamOrAwayTeamId(teamId,teamId);
+        return matchRepository.findByHomeTeamIdOrAwayTeamId(teamId,teamId);
     }
 
     public List<Match> getByLeague(Long leagueId){
