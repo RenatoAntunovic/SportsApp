@@ -11,5 +11,6 @@ public class Sport {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
+    @Column(columnDefinition = "TEXT")
     private String iconUrl;
 }

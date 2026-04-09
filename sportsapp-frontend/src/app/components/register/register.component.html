@@ -1,0 +1,57 @@
+<div class="page">
+  <div class="left">
+    <div class="bg-circle bc1"></div>
+    <div class="bg-circle bc2"></div>
+    <div class="brand">
+      <div class="logo-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="#0f1923">
+          <path d="M19 5h-2V3H7v2H5C3.9 5 3 5.9 3 7v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0 0 11 15.9V18H9v2h6v-2h-2v-2.1a5.01 5.01 0 0 0 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zm-2 3.82C17 10.58 15.58 12 13.82 12H10.18C8.42 12 7 10.58 7 8.82V7h2V5h6v2h2v1.82zM5 8V7h2v1.82c0 .65.1 1.27.26 1.87C5.94 10.25 5 9.22 5 8zm14 0c0 1.22-.94 2.25-2.26 2.69.16-.6.26-1.22.26-1.87V7h2v1z"/>
+        </svg>
+      </div>
+      <span class="brand-name">SportsApp</span>
+    </div>
+    <div class="left-hero">
+      <div class="hero-title">Pridruži se<br>zajednici<br><span>sportskih fanatika.</span></div>
+      <div class="hero-sub">Kreiraj račun i počni pratiti svoje omiljene timove, igrače i takmičenja.</div>
+    </div>
+    <div class="left-bottom">
+      <div class="tags">
+        <span class="tag tag-green">● LIVE</span>
+        <span class="tag tag-gray">Football</span>
+        <span class="tag tag-gray">NBA</span>
+        <span class="tag tag-gray">Tennis</span>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><div class="stat-num">12+</div><div class="stat-label">Sportova</div></div>
+        <div class="stat"><div class="stat-num">500+</div><div class="stat-label">Liga</div></div>
+        <div class="stat"><div class="stat-num">10k+</div><div class="stat-label">Timova</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="right">
+    <div class="form-card">
+      <div class="form-title">Kreiraj račun</div>
+      <div class="form-sub">Registracija je besplatna</div>
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label class="form-label">Korisničko ime</label>
+          <input class="form-input" formControlName="username" type="text" placeholder="Tvoje ime..." />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" formControlName="email" type="email" placeholder="email@primjer.com" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Lozinka</label>
+          <input class="form-input" formControlName="password" type="password" placeholder="••••••••••" />
+        </div>
+        <div class="error-msg" *ngIf="errorMsg">{{ errorMsg }}</div>
+        <button class="btn-submit" type="submit" [disabled]="registerForm.invalid">Registruj se</button>
+      </form>
+      <div class="link-row">Već imaš račun? <a routerLink="/login">Prijavi se</a></div>
+      <div class="guest-row">
+  <a routerLink="/">Nastavi kao gost →</a>
+</div>
+    </div>
+  </div>
+</div>

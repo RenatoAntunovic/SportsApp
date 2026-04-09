@@ -4,6 +4,8 @@ import com.renato.sportsapp.filter.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,20 +26,37 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-                        // Swagger - dozvoli pristup
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/swagger-ui.html").permitAll()
                         .requestMatchers("/v3/api-docs/**").permitAll()
-                        // Auth endpointi
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/sports/**").permitAll()
-                        .requestMatchers("/api/leagues/**").permitAll()
-                        // Sve ostalo treba token
+                        .requestMatchers(HttpMethod.GET, "/api/sports/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/leagues/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/sports/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/sports/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/sports/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/leagues/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/leagues/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/leagues/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/teams/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/teams/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/teams/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/players/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/players/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/players/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/matches/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/matches/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/matches/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/standings/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/standings/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/standings/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

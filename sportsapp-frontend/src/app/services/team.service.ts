@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { League } from './league.service';
+import { LeagueService } from './league.service';
+import { Team } from '../models/team.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class Team {
+export class TeamService {
    private apiUrl = 'http://localhost:8080/api/teams';
 
   constructor(private http:HttpClient){}

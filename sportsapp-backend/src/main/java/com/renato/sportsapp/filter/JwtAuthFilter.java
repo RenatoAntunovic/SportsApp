@@ -55,5 +55,30 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+
+        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            if (jwtService.isTokenValid(token, email)) {
+                System.out.println("=== JWT DEBUG ===");
+                System.out.println("Email: " + email);
+                System.out.println("Role: " + role);
+                System.out.println("Authority postavljen: ROLE_" + role);
+
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(
+                                email,
+                                null,
+                                List.of(new SimpleGrantedAuthority("ROLE_" + role))
+                        );
+
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            } else {
+                System.out.println("=== TOKEN NIJE VALIDAN ===");
+            }
+        } else {
+            System.out.println("=== AUTH VEĆ POSTOJI ili email null ===");
+            System.out.println("Email: " + email);
+        }
     }
+
+
 }

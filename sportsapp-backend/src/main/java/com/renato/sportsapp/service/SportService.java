@@ -32,7 +32,11 @@ public class SportService {
         return  sportRepository.save(existing);
     }
 
-    public void delete(Long id){
-        sportRepository.deleteById(id);
+    public void delete(Long id) {
+        try {
+            sportRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Ne možeš obrisati sport koji ima vezane lige. Prvo obriši sve lige tog sporta!");
+        }
     }
 }
