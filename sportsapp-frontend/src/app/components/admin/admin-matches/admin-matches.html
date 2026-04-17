@@ -1,1 +1,133 @@
-<p>admin-matches works!</p>
+<div class="admin-section">
+  <div class="section-header">
+    <div>
+      <h1 class="section-title">Mečevi</h1>
+      <p class="section-sub">Upravljaj mečevima u aplikaciji</p>
+    </div>
+    <button class="btn-add" type="button" (click)="openModal()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+      Dodaj meč
+    </button>
+  </div>
+
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Liga</th>
+          <th>Domaći</th>
+          <th>Rezultat</th>
+          <th>Gostujući</th>
+          <th>Datum</th>
+          <th>Status</th>
+          <th>Akcije</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let match of matches">
+          <td class="td-id">{{ match.id }}</td>
+          <td>{{ match.league?.name || '—' }}</td>
+          <td class="td-name">{{ match.homeTeam?.name || '—' }}</td>
+          <td>{{ match.homeScore }} : {{ match.awayScore }}</td>
+          <td class="td-name">{{ match.awayTeam?.name || '—' }}</td>
+          <td>{{ match.matchDate | date:'dd.MM.yyyy HH:mm' }}</td>
+          <td>{{ match.status }}</td>
+          <td>
+            <div class="action-btns">
+              <button class="btn-edit" type="button" (click)="openModal(match)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                Uredi
+              </button>
+              <button class="btn-delete" type="button" (click)="deleteMatch(match.id!)">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                Obriši
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="matches.length === 0">
+          <td colspan="8" class="empty-row">Nema mečeva. Dodaj prvi meč!</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2 class="modal-title">{{ editMode ? 'Uredi meč' : 'Dodaj meč' }}</h2>
+      <button class="modal-close" type="button" (click)="closeModal()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Sport</label>
+        <select class="form-input" [(ngModel)]="selectedSportId"
+                (ngModelChange)="selectedLeagueId = null; selectedHomeTeamId = null; selectedAwayTeamId = null">
+          <option [ngValue]="null">-- Odaberi sport --</option>
+          <option *ngFor="let sport of sports" [ngValue]="sport.id">{{ sport.name }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Liga</label>
+        <select class="form-input" [(ngModel)]="selectedLeagueId"
+                (ngModelChange)="selectedHomeTeamId = null; selectedAwayTeamId = null">
+          <option [ngValue]="null">-- Odaberi ligu --</option>
+          <option *ngFor="let league of filteredLeagues" [ngValue]="league.id">{{ league.name }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Domaći tim</label>
+        <select class="form-input" [(ngModel)]="selectedHomeTeamId"
+                (ngModelChange)="selectedAwayTeamId = null">
+          <option [ngValue]="null">-- Odaberi domaći tim --</option>
+          <option *ngFor="let team of filteredHomeTeams" [ngValue]="team.id">{{ team.name }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Gostujući tim</label>
+        <select class="form-input" [(ngModel)]="selectedAwayTeamId">
+          <option [ngValue]="null">-- Odaberi gostujući tim --</option>
+          <option *ngFor="let team of filteredAwayTeams" [ngValue]="team.id">{{ team.name }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Datum i vrijeme</label>
+        <input class="form-input" type="datetime-local" [(ngModel)]="form.matchDate" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Rezultat domaćeg</label>
+        <input class="form-input" type="number" [(ngModel)]="form.homeScore" min="0" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Rezultat gostujućeg</label>
+        <input class="form-input" type="number" [(ngModel)]="form.awayScore" min="0" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="form-input" [(ngModel)]="form.status">
+          <option value="SCHEDULED">Zakazan</option>
+          <option value="LIVE">Uživo</option>
+          <option value="FINISHED">Završen</option>
+          <option value="POSTPONED">Odgođen</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" type="button" (click)="closeModal()">Odustani</button>
+      <button class="btn-save" type="button" (click)="saveMatch()" [disabled]="saving">
+        {{ saving ? 'Čekaj...' : (editMode ? 'Spremi' : 'Dodaj') }}
+      </button>
+    </div>
+  </div>
+</div>

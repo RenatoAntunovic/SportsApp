@@ -13,6 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MatchService {
     private final MatchRepository matchRepository;
+    private final StandingService standingService;
 
     public List<Match> findAll(){
         return  matchRepository.findAll();
@@ -35,7 +36,17 @@ public class MatchService {
     }
 
     public Match create(Match match){
-        return  matchRepository.save(match);
+        Match saved = matchRepository.save(match);
+        System.out.println("=== MATCH CREATED ===");
+        System.out.println("League: " + (saved.getLeague() != null ? saved.getLeague().getId() : "NULL"));
+        System.out.println("Status: " + saved.getStatus());
+
+        if (saved.getLeague() != null) {
+            System.out.println("Radi...");
+            standingService.recalculateStandingsForLeague(saved.getLeague().getId());
+            System.out.println("Radi sve");
+        }
+        return saved;
     }
 
     public Match update(Long id, Match updatedMatch){

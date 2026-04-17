@@ -1,1 +1,74 @@
-<p>admin-standings works!</p>
+<div class="admin-section">
+  <div class="section-header">
+    <div>
+      <h1 class="section-title">Standings</h1>
+      <p class="section-sub">Pregled tabela za svaku ligu (automatski se generiše)</p>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <label class="filter-label">Odaberi ligu:</label>
+    <select class="filter-select" [(ngModel)]="selectedLeagueId" (ngModelChange)="onLeagueChange()">
+      <option [ngValue]="null">-- Odaberi ligu --</option>
+      <option *ngFor="let league of leagues" [ngValue]="league.id">
+        {{ league.name }} ({{ league.country }})
+      </option>
+    </select>
+  </div>
+
+  <div class="table-container" *ngIf="selectedLeagueId">
+    <table class="data-table standings-table">
+      <thead>
+        <tr>
+          <th class="col-pos">#</th>
+          <th>Tim</th>
+          <th class="col-stat">P</th>
+          <th class="col-stat">W</th>
+          <th class="col-stat">D</th>
+          <th class="col-stat">L</th>
+          <th class="col-stat">GF</th>
+          <th class="col-stat">GA</th>
+          <th class="col-stat">GD</th>
+          <th class="col-stat col-pts">PTS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of standings">
+          <td class="td-position">
+            <span class="position-badge" [class.top]="s.position <= 4" [class.bottom]="s.position >= standings.length - 2">
+              {{ s.position }}
+            </span>
+          </td>
+          <td class="td-team">
+            <div class="team-cell">
+              <img *ngIf="s.team?.logoUrl" [src]="s.team?.logoUrl" class="team-logo-sm" alt="logo"
+                   (error)="s.team!.logoUrl = ''" />
+              <span *ngIf="!s.team?.logoUrl" class="team-logo-placeholder">{{ s.team?.name?.charAt(0) }}</span>
+              <span class="team-name">{{ s.team?.name }}</span>
+            </div>
+          </td>
+          <td class="td-stat">{{ s.played }}</td>
+          <td class="td-stat won">{{ s.won }}</td>
+          <td class="td-stat drawn">{{ s.drawn }}</td>
+          <td class="td-stat lost">{{ s.lost }}</td>
+          <td class="td-stat">{{ s.goalsFor }}</td>
+          <td class="td-stat">{{ s.goalsAgainst }}</td>
+          <td class="td-stat" [class.positive]="getGoalDifference(s) > 0" [class.negative]="getGoalDifference(s) < 0">
+            {{ getGoalDifference(s) > 0 ? '+' : '' }}{{ getGoalDifference(s) }}
+          </td>
+          <td class="td-stat td-points">{{ s.points }}</td>
+        </tr>
+        <tr *ngIf="standings.length === 0">
+          <td colspan="10" class="empty-row">Nema standings za ovu ligu. Dodaj FINISHED mečeve da se generišu!</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="empty-state" *ngIf="!selectedLeagueId">
+    <svg width="60" height="60" viewBox="0 0 24 24" fill="#3d4f63">
+      <path d="M7.5 21H2V9h5.5v12zm7.25-18h-5.5v18h5.5V3zM22 11h-5.5v10H22V11z"/>
+    </svg>
+    <p>Odaberi ligu da vidiš tabelu</p>
+  </div>
+</div>
