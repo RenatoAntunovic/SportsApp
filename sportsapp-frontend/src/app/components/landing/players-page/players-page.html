@@ -1,0 +1,60 @@
+<div class="page">
+  <app-navbar></app-navbar>
+
+  <div class="content">
+    <div class="page-header">
+      <h1>Igrači</h1>
+      <p>Svi igrači iz cijelog svijeta</p>
+    </div>
+
+    <div class="filter-bar">
+      <div class="filter-group">
+        <label>Sport</label>
+        <select [(ngModel)]="selectedSportId" (ngModelChange)="onSportChange()">
+          <option [ngValue]="null">Svi sportovi</option>
+          <option *ngFor="let sport of sports" [ngValue]="sport.id">{{ sport.name }}</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Liga</label>
+        <select [(ngModel)]="selectedLeagueId" (ngModelChange)="onLeagueChange()">
+          <option [ngValue]="null">Sve lige</option>
+          <option *ngFor="let league of filteredLeagues" [ngValue]="league.id">{{ league.name }}</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Tim</label>
+        <select [(ngModel)]="selectedTeamId">
+          <option [ngValue]="null">Svi timovi</option>
+          <option *ngFor="let team of filteredTeams" [ngValue]="team.id">{{ team.name }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="players-grid">
+      <div class="player-card" *ngFor="let player of filteredPlayers">
+        <div class="player-photo-wrap">
+          <img *ngIf="player.photoUrl" [src]="player.photoUrl" class="player-photo" alt="photo" (error)="player.photoUrl = ''"/>
+          <div *ngIf="!player.photoUrl" class="player-photo-placeholder">{{ getPlayerInitials(player.name) }}</div>
+        </div>
+        <div class="player-info">
+          <div class="player-name">{{ player.name }}</div>
+          <div class="player-meta">
+            <span class="player-position" *ngIf="player.position">{{ player.position }}</span>
+            <span class="player-age" *ngIf="player.age">{{ player.age }} god.</span>
+          </div>
+          <div class="player-team" *ngIf="player.team">
+            <img *ngIf="player.team.logoUrl" [src]="player.team.logoUrl" class="player-team-logo" alt="logo" (error)="player.team.logoUrl = ''"/>
+            <span>{{ player.team.name }}</span>
+          </div>
+          <div class="player-nationality" *ngIf="player.nationality">{{ player.nationality }}</div>
+        </div>
+      </div>
+      <div *ngIf="filteredPlayers.length === 0" class="empty-msg">
+        Nema igrača za ovaj filter.
+      </div>
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+</div>

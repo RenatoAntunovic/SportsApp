@@ -71,28 +71,19 @@
         <label class="form-label">Ime i prezime igrača</label>
         <input class="form-input" type="text" [(ngModel)]="form.name" placeholder="npr. Renato Antunović" />
       </div>
-       <div class="form-group">
-        <label class="form-label">Pozicija</label>
-        <input class="form-input" type="text" [(ngModel)]="form.position" placeholder="Napadač" />
-      </div>
-       <div class="form-group">
-        <label class="form-label">Godine</label>
-        <input class="form-input" type="text" [(ngModel)]="form.age" placeholder="22" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Nacionalnost</label>
-        <input class="form-input" type="text" [(ngModel)]="form.nationality" placeholder="npr. Bosna i Hercegovina" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Photo URL</label>
-        <input class="form-input" type="text" [(ngModel)]="form.photoUrl" placeholder="https://..." />
-      </div>
       <div class="form-group">
         <label class="form-label">Sport</label>
         <select class="form-input" [(ngModel)]="selectedSportId" (ngModelChange)="selectedLeagueId = null; selectedTeamId = null">
           <option [ngValue]="null">-- Odaberi sport --</option>
           <option *ngFor="let sport of sports" [ngValue]="sport.id">{{ sport.name }}</option>
         </select>
+        </div>
+        <div class="form-group">
+      <label class="form-label">Pozicija</label>
+      <select class="form-input" [(ngModel)]="form.position" [disabled]="!selectedSportId">
+       <option [ngValue]="''">{{ selectedSportId ? '-- Odaberi poziciju --' : 'Prvo odaberi sport' }}</option>
+      <option *ngFor="let pos of availablePositions" [ngValue]="pos">{{ pos }}</option>
+      </select>
         </div>
         <div class="form-group">
         <label class="form-label">Liga</label>
@@ -107,6 +98,18 @@
           <option [ngValue]="null">-- Odaberi tim --</option>
           <option *ngFor="let team of filteredTeams" [ngValue]="team.id">{{ team.name }}</option>
         </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Godine</label>
+        <input class="form-input" type="text" [(ngModel)]="form.age" placeholder="22" />
+      </div>
+       <div class="form-group">
+        <label class="form-label">Photo URL</label>
+        <input class="form-input" type="text" [(ngModel)]="form.photoUrl" placeholder="https://..." />
+      </div>
+       <div class="form-group">
+        <label class="form-label">Nacionalnost</label>
+        <input class="form-input" type="text" [(ngModel)]="form.nationality" placeholder="npr. Bosna i Hercegovina" />
       </div>
     </div>
     <div class="modal-footer">

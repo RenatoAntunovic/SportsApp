@@ -18,6 +18,16 @@ import { SportService } from '../../../services/sport.service';
   standalone :true
 })
 export class AdminPlayers implements OnInit{
+
+  positionsMap: { [key: string]: string[] } = {
+  'Fudbal': ['Golman', 'Odbrana', 'Vezni red', 'Napad'],
+  'Košarka': ['Point Guard', 'Shooting Guard', 'Small Forward', 'Power Forward', 'Center'],
+  'Hokej': ['Golman', 'Odbrana', 'Napad'],
+  'Tenis': ['Igrač'],
+  'Boks': ['Bokser'],
+  'Odbojka': ['Tehničar', 'Primač', 'Korektor', 'Libero', 'Centar']
+};
+
   leagues : League[] = [];
   sports : Sport[] = [];
   teams : Team[] = [];
@@ -176,4 +186,10 @@ export class AdminPlayers implements OnInit{
       return this.teams;
     return this.teams.filter(l => l.league?.id=== this.selectedLeagueId);
   }
+  get availablePositions(): string[] {
+    if (!this.selectedSportId) return [];
+    const sport = this.sports.find(s => s.id === this.selectedSportId);
+    if (!sport) return [];
+    return this.positionsMap[sport.name] || [];
+}
 }

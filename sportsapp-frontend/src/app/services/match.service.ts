@@ -36,5 +36,6 @@ export class MatchService {
   getByTeam(teamId: number): Observable<Match[]> {
     return this.http.get<Match[]>(`${this.apiUrl}/team/${teamId}`);
   }
+  
 
 }

@@ -1,0 +1,35 @@
+<nav class="nav">
+  <div class="nav-brand" routerLink="/">
+    <div class="nav-logo">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="#0a1628">
+        <path d="M19 5h-2V3H7v2H5C3.9 5 3 5.9 3 7v1c0 2.55 1.92 4.63 4.39 4.94A5.01 5.01 0 0 0 11 15.9V18H9v2h6v-2h-2v-2.1a5.01 5.01 0 0 0 3.61-2.96C19.08 12.63 21 10.55 21 8V7c0-1.1-.9-2-2-2zm-2 3.82C17 10.58 15.58 12 13.82 12H10.18C8.42 12 7 10.58 7 8.82V7h2V5h6v2h2v1.82zM5 8V7h2v1.82c0 .65.1 1.27.26 1.87C5.94 10.25 5 9.22 5 8zm14 0c0 1.22-.94 2.25-2.26 2.69.16-.6.26-1.22.26-1.87V7h2v1z"/>
+      </svg>
+    </div>
+    <span class="nav-name">SportsApp</span>
+  </div>
+
+  <div class="nav-links">
+    <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Početna</a>
+    <a class="nav-link" routerLink="/matches" routerLinkActive="active">Rezultati</a>
+    <a class="nav-link" routerLink="/leagues" routerLinkActive="active">Lige</a>
+    <a class="nav-link" routerLink="/teams" routerLinkActive="active">Timovi</a>
+    <a class="nav-link" routerLink="/players" routerLinkActive="active">Igrači</a>
+  </div>
+
+  <div class="nav-actions" *ngIf="!isLoggedIn">
+    <button class="btn-outline" routerLink="/login">Prijavi se</button>
+    <button class="btn-primary" routerLink="/register">Registruj se</button>
+  </div>
+
+  <div class="nav-actions" *ngIf="isLoggedIn">
+    <a class="btn-outline" *ngIf="isAdmin" routerLink="/admin">Admin panel</a>
+    <div class="user-info">
+      <div class="user-avatar">{{ userEmail.charAt(0).toUpperCase() }}</div>
+      <span class="user-email">{{ userEmail }}</span>
+    </div>
+    <button class="btn-logout" (click)="logout()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>
+      Odjava
+    </button>
+  </div>
+</nav>

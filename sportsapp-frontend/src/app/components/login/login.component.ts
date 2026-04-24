@@ -23,12 +23,19 @@ export class LoginComponent {
 
   errorMsg = '';
 
-  onSubmit() {
-    if (this.loginForm.valid) {
-      this.authService.login(this.loginForm.value).subscribe({
-        next: () => this.router.navigate(['/admin']),
-        error: (err) => this.errorMsg = 'Pogrešan email ili lozinka.'
-      });
-    }
+ onSubmit() {
+  if (this.loginForm.valid) {
+    this.authService.login(this.loginForm.value).subscribe({
+      next: () => {
+        const role = this.authService.getRole();
+        if (role === 'ADMIN') {
+          this.router.navigate(['/admin']);
+        } else {
+          this.router.navigate(['/']);
+        }
+      },
+      error: () => this.errorMsg = 'Pogrešan email ili lozinka.'
+    });
   }
+}
 }

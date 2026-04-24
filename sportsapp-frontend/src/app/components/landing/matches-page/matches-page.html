@@ -1,0 +1,70 @@
+<div class="page">
+  <app-navbar></app-navbar>
+
+  <div class="content">
+    <div class="page-header">
+      <h1>Rezultati</h1>
+      <p>Svi mečevi na jednom mjestu</p>
+    </div>
+
+    <div class="filter-bar">
+      <div class="filter-group">
+        <label>Sport</label>
+        <select [(ngModel)]="selectedSportId" (ngModelChange)="onSportChange()">
+          <option [ngValue]="null">Svi sportovi</option>
+          <option *ngFor="let sport of sports" [ngValue]="sport.id">{{ sport.name }}</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Liga</label>
+        <select [(ngModel)]="selectedLeagueId">
+          <option [ngValue]="null">Sve lige</option>
+          <option *ngFor="let league of filteredLeagues" [ngValue]="league.id">{{ league.name }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="matches-container">
+      <div class="matches-tabs">
+        <div class="mtab" [class.active]="activeTab === 'ALL'" (click)="setTab('ALL')">Svi</div>
+        <div class="mtab" [class.active]="activeTab === 'LIVE'" (click)="setTab('LIVE')">LIVE</div>
+        <div class="mtab" [class.active]="activeTab === 'SCHEDULED'" (click)="setTab('SCHEDULED')">Zakazani</div>
+        <div class="mtab" [class.active]="activeTab === 'FINISHED'" (click)="setTab('FINISHED')">Završeni</div>
+      </div>
+      <div class="match-item" *ngFor="let match of filteredMatches">
+        <div class="mi-league">{{ match.league?.name }}</div>
+        <div class="mi-teams">
+          <div class="mi-team-row">
+            <img *ngIf="match.homeTeam?.logoUrl" [src]="match.homeTeam?.logoUrl" class="mi-team-logo-img" alt="logo" (error)="match.homeTeam!.logoUrl = ''"/>
+            <div *ngIf="!match.homeTeam?.logoUrl" class="mi-team-logo">{{ getTeamInitials(match.homeTeam?.name) }}</div>
+            <span class="mi-team-name">{{ match.homeTeam?.name }}</span>
+          </div>
+          <div class="mi-team-row">
+            <img *ngIf="match.awayTeam?.logoUrl" [src]="match.awayTeam?.logoUrl" class="mi-team-logo-img" alt="logo" (error)="match.awayTeam!.logoUrl = ''"/>
+            <div *ngIf="!match.awayTeam?.logoUrl" class="mi-team-logo">{{ getTeamInitials(match.awayTeam?.name) }}</div>
+            <span class="mi-team-name">{{ match.awayTeam?.name }}</span>
+          </div>
+        </div>
+        <div class="mi-scores">
+          <span class="mi-score" [class.winner]="match.homeScore > match.awayScore && match.status === 'FINISHED'">
+            {{ match.status === 'SCHEDULED' ? '-' : match.homeScore }}
+          </span>
+          <span class="mi-score" [class.winner]="match.awayScore > match.homeScore && match.status === 'FINISHED'">
+            {{ match.status === 'SCHEDULED' ? '-' : match.awayScore }}
+          </span>
+        </div>
+        <div class="mi-status">
+          <span class="mi-live" *ngIf="match.status === 'LIVE'">● LIVE</span>
+          <span class="mi-time" *ngIf="match.status === 'FINISHED'" style="color:#6b7a8d;">Kraj</span>
+          <span class="mi-time" *ngIf="match.status === 'SCHEDULED'">{{ match.matchDate | date:'dd.MM HH:mm' }}</span>
+          <span class="mi-time" *ngIf="match.status === 'POSTPONED'" style="color:#ffaa2c;">Odgođen</span>
+        </div>
+      </div>
+      <div *ngIf="filteredMatches.length === 0" class="empty-msg">
+        Nema mečeva za ovaj filter.
+      </div>
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+</div>

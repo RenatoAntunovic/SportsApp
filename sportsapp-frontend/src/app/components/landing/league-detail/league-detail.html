@@ -1,0 +1,115 @@
+<div class="page">
+  <app-navbar></app-navbar>
+
+  <div class="content" *ngIf="league">
+    <div class="league-hero">
+      <img *ngIf="league.logoUrl" [src]="league.logoUrl" class="league-logo-lg" alt="logo" (error)="league.logoUrl = ''"/>
+      <div *ngIf="!league.logoUrl" class="league-logo-placeholder-lg">{{ league.name.charAt(0) }}</div>
+      <div class="league-hero-info">
+        <div class="league-breadcrumb">
+          <span *ngIf="league.sport">{{ league.sport.name }}</span>
+          <span class="separator">•</span>
+          <span>{{ league.country }}</span>
+        </div>
+        <h1>{{ league.name }}</h1>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab" [class.active]="activeTab === 'STANDINGS'" (click)="setTab('STANDINGS')">Tabela</div>
+      <div class="tab" [class.active]="activeTab === 'MATCHES'" (click)="setTab('MATCHES')">Mečevi</div>
+    </div>
+
+    <div class="tab-content" *ngIf="activeTab === 'STANDINGS'">
+      <div class="standings-container" *ngIf="standings.length > 0">
+        <table class="standings-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Tim</th>
+              <th>P</th>
+              <th>W</th>
+              <th>D</th>
+              <th>L</th>
+              <th>GF</th>
+              <th>GA</th>
+              <th>GD</th>
+              <th>PTS</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let s of standings">
+              <td>
+                <span class="position-badge" [class.top]="s.position <= 4" [class.bottom]="s.position >= standings.length - 2">
+                  {{ s.position }}
+                </span>
+              </td>
+              <td>
+                <div class="team-cell">
+                  <img *ngIf="s.team?.logoUrl" [src]="s.team?.logoUrl" class="team-logo-sm" alt="logo" (error)="s.team!.logoUrl = ''"/>
+                  <div *ngIf="!s.team?.logoUrl" class="team-logo-placeholder">{{ getTeamInitials(s.team?.name) }}</div>
+                  <span class="team-name">{{ s.team?.name }}</span>
+                </div>
+              </td>
+              <td>{{ s.played }}</td>
+              <td class="won">{{ s.won }}</td>
+              <td class="drawn">{{ s.drawn }}</td>
+              <td class="lost">{{ s.lost }}</td>
+              <td>{{ s.goalsFor }}</td>
+              <td>{{ s.goalsAgainst }}</td>
+              <td [class.positive]="getGoalDifference(s) > 0" [class.negative]="getGoalDifference(s) < 0">
+                {{ getGoalDifference(s) > 0 ? '+' : '' }}{{ getGoalDifference(s) }}
+              </td>
+              <td class="pts">{{ s.points }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="empty-msg" *ngIf="standings.length === 0">
+        Nema standings-a za ovu ligu. Dodaj FINISHED mečeve da se generišu!
+      </div>
+    </div>
+
+    <div class="tab-content" *ngIf="activeTab === 'MATCHES'">
+      <div class="matches-container" *ngIf="matches.length > 0">
+        <div class="match-item" *ngFor="let match of matches">
+          <div class="mi-teams">
+            <div class="mi-team-row">
+              <img *ngIf="match.homeTeam?.logoUrl" [src]="match.homeTeam?.logoUrl" class="mi-team-logo-img" alt="logo" (error)="match.homeTeam!.logoUrl = ''"/>
+              <div *ngIf="!match.homeTeam?.logoUrl" class="mi-team-logo">{{ getTeamInitials(match.homeTeam?.name) }}</div>
+              <span class="mi-team-name">{{ match.homeTeam?.name }}</span>
+            </div>
+            <div class="mi-team-row">
+              <img *ngIf="match.awayTeam?.logoUrl" [src]="match.awayTeam?.logoUrl" class="mi-team-logo-img" alt="logo" (error)="match.awayTeam!.logoUrl = ''"/>
+              <div *ngIf="!match.awayTeam?.logoUrl" class="mi-team-logo">{{ getTeamInitials(match.awayTeam?.name) }}</div>
+              <span class="mi-team-name">{{ match.awayTeam?.name }}</span>
+            </div>
+          </div>
+          <div class="mi-scores">
+            <span class="mi-score" [class.winner]="match.homeScore > match.awayScore && match.status === 'FINISHED'">
+              {{ match.status === 'SCHEDULED' ? '-' : match.homeScore }}
+            </span>
+            <span class="mi-score" [class.winner]="match.awayScore > match.homeScore && match.status === 'FINISHED'">
+              {{ match.status === 'SCHEDULED' ? '-' : match.awayScore }}
+            </span>
+          </div>
+          <div class="mi-status">
+            <span class="mi-live" *ngIf="match.status === 'LIVE'">● LIVE</span>
+            <span class="mi-time" *ngIf="match.status === 'FINISHED'">Kraj</span>
+            <span class="mi-time" *ngIf="match.status === 'SCHEDULED'">{{ match.matchDate | date:'dd.MM HH:mm' }}</span>
+            <span class="mi-time" *ngIf="match.status === 'POSTPONED'" style="color:#ffaa2c;">Odgođen</span>
+          </div>
+        </div>
+      </div>
+      <div class="empty-msg" *ngIf="matches.length === 0">
+        Nema mečeva za ovu ligu.
+      </div>
+    </div>
+  </div>
+
+  <div class="content" *ngIf="!league">
+    <div class="empty-msg">Učitavanje...</div>
+  </div>
+
+  <app-footer></app-footer>
+</div>
