@@ -12,6 +12,7 @@ import { Team } from '../../models/team.model';
 import { Navbar } from '../shared/navbar/navbar';
 import { Footer } from '../shared/footer/footer';
 import { AuthService } from '../../services/auth.service';
+import { FavoriteService } from '../../services/favorite.service';
 
 @Component({
   selector: 'app-landing',
@@ -26,7 +27,8 @@ export class LandingComponent implements OnInit {
   teams: Team[] = [];
   matches: Match[] = [];
 
-  
+  favoriteTeams : Team[] = [];
+  favoriteLeagues: League[] = [];
   sportsCount = 0;
   leaguesCount = 0;
   teamsCount = 0;
@@ -42,12 +44,30 @@ export class LandingComponent implements OnInit {
     private leagueService: LeagueService,
     private teamService: TeamService,
     private cdr: ChangeDetectorRef,
-    private authService : AuthService
+    private authService : AuthService,
+    private favoriteService: FavoriteService
   ) {}
 
   ngOnInit() {
     this.isLoggedIn = this.authService.isLoggedIn();
     this.loadAll();
+    if(this.isLoggedIn){
+      this.loadFavorites();
+    }
+  }
+   loadFavorites() {
+    this.favoriteService.getFavoriteTeams().subscribe({
+      next: (data) => {
+        this.favoriteTeams = [...data];
+        this.cdr.detectChanges();
+      }
+    });
+    this.favoriteService.getFavoriteLeagues().subscribe({
+      next: (data) => {
+        this.favoriteLeagues = [...data];
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   loadAll() {
@@ -112,5 +132,14 @@ export class LandingComponent implements OnInit {
     const words = name.split(' ');
     if (words.length >= 2) return (words[0][0] + words[1][0]).toUpperCase();
     return name.substring(0, 2).toUpperCase();
+  }
+
+  get favoriteTeamsMatches(): Match[] {
+    if (this.favoriteTeams.length === 0) return [];
+    const favoriteIds = new Set(this.favoriteTeams.map(t => t.id!));
+    return this.matches.filter(m => 
+      (m.homeTeam?.id && favoriteIds.has(m.homeTeam.id)) ||
+      (m.awayTeam?.id && favoriteIds.has(m.awayTeam.id))
+    ).slice(0, 5); 
   }
 }

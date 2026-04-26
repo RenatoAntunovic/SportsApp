@@ -1,43 +1,52 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
 import { Navbar } from '../../shared/navbar/navbar';
 import { Footer } from '../../shared/footer/footer';
 import { League } from '../../../models/league.model';
 import { Sport } from '../../../models/sport.model';
 import { LeagueService } from '../../../services/league.service';
 import { SportService } from '../../../services/sport.service';
-import { RouterLink } from '@angular/router';
+import { FavoriteService } from '../../../services/favorite.service';
+import { AuthService } from '../../../services/auth.service';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-leagues-page',
   standalone: true,
-  imports: [CommonModule,FormsModule,Navbar,Footer,RouterLink],
+  imports: [CommonModule, FormsModule, Navbar, Footer, RouterLink],
   templateUrl: './leagues-page.html',
   styleUrl: './leagues-page.css',
 })
-export class LeaguesPage implements OnInit{
+export class LeaguesPage implements OnInit {
   leagues: League[] = [];
   sports: Sport[] = [];
-  
-  selectedSportId : number | null = null;
+  favoriteLeagueIds: Set<number> = new Set();
 
-  /**
-   *
-   */
+  selectedSportId: number | null = null;
+
   constructor(
     private leagueService: LeagueService,
-    private sportService : SportService,
-    private cdr : ChangeDetectorRef
-  ){}
+    private sportService: SportService,
+    private favoriteService: FavoriteService,
+    private authService: AuthService,
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+    private toastService : ToastService
+  ) {}
 
-  ngOnInit(){
+  ngOnInit() {
     this.loadLeagues();
     this.loadSports();
+    if (this.authService.isLoggedIn()) {
+      this.loadFavorites();
+    }
   }
+
   loadSports() {
     this.sportService.getAll().subscribe({
-      next:(data) => {
+      next: (data) => {
         this.sports = [...data];
         this.cdr.detectChanges();
       }
@@ -46,15 +55,55 @@ export class LeaguesPage implements OnInit{
 
   loadLeagues() {
     this.leagueService.getAll().subscribe({
-      next:(data) => {
+      next: (data) => {
         this.leagues = [...data];
         this.cdr.detectChanges();
       }
     });
   }
 
-  get filteredLeagues(): League[]{
-    if(!this.selectedSportId) return this.leagues;
-    return this.leagues.filter(x=>x.sport?.id == this.selectedSportId);
+  loadFavorites() {
+    this.favoriteService.getFavoriteLeagues().subscribe({
+      next: (data) => {
+        this.favoriteLeagueIds = new Set(data.map(l => l.id!));
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  isFavorite(leagueId: number): boolean {
+    return this.favoriteLeagueIds.has(leagueId);
+  }
+
+ toggleFavorite(event: Event, leagueId: number) {
+  event.stopPropagation();
+  event.preventDefault();
+
+  if (!this.authService.isLoggedIn()) {
+    this.toastService.info('Prijavi se da bi dodao ligu u favorite');
+    this.router.navigate(['/login']);
+    return;
+  }
+
+  const wasAlreadyFavorite = this.favoriteLeagueIds.has(leagueId);
+
+  this.favoriteService.toggleLeagueFavorite(leagueId).subscribe({
+    next: () => {
+      if (wasAlreadyFavorite) {
+        this.favoriteLeagueIds.delete(leagueId);
+        this.toastService.info('Liga uklonjena iz favorita');
+      } else {
+        this.favoriteLeagueIds.add(leagueId);
+        this.toastService.success('Liga dodana u favorite');
+      }
+      this.cdr.detectChanges();
+    },
+    error: () => this.toastService.error('Greška pri ažuriranju favorita')
+  });
+}
+
+  get filteredLeagues(): League[] {
+    if (!this.selectedSportId) return this.leagues;
+    return this.leagues.filter(x => x.sport?.id == this.selectedSportId);
   }
 }

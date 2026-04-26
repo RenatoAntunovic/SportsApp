@@ -174,3 +174,39 @@
   color: #3d4f63;
   font-size: 14px;
 }
+
+.league-card {
+  position: relative;
+}
+
+.favorite-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #6b7a8d;
+  transition: all 180ms;
+  z-index: 2;
+}
+
+.favorite-btn:hover {
+  background: rgba(255, 170, 44, 0.1);
+  color: #ffaa2c;
+}
+
+.favorite-btn.active {
+  background: rgba(255, 170, 44, 0.15);
+  color: #ffaa2c;
+}
+
+app-footer {
+  margin-top: auto;
+}

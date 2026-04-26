@@ -51,6 +51,86 @@
     </div>
   </div>
 
+<!-- Favoriti sekcije - prikazuju se samo ulogovanim korisnicima -->
+<div class="section favorites-section" *ngIf="isLoggedIn">
+  <div class="section-header">
+    <span class="section-title">⭐ Tvoji omiljeni</span>
+  </div>
+
+  <!-- Prazna poruka -->
+  <div class="empty-favorites" *ngIf="favoriteTeams.length === 0 && favoriteLeagues.length === 0">
+    <p>Još nemaš označenih favorita.</p>
+    <p class="empty-hint">Klikni na zvjezdicu pored tima ili lige da ih dodaš ovdje!</p>
+    <div class="empty-actions">
+      <button class="hbtn-primary" routerLink="/teams">Pregledaj timove</button>
+      <button class="hbtn-outline" routerLink="/leagues">Pregledaj lige</button>
+    </div>
+  </div>
+
+  <!-- Omiljeni timovi -->
+  <div class="favorite-block" *ngIf="favoriteTeams.length > 0">
+    <div class="block-title">Timovi</div>
+    <div class="favorite-teams-grid">
+      <div class="fav-team-card" *ngFor="let team of favoriteTeams" [routerLink]="['/teams', team.id]">
+        <img *ngIf="team.logoUrl" [src]="team.logoUrl" class="fav-team-logo" alt="logo" (error)="team.logoUrl = ''"/>
+        <div *ngIf="!team.logoUrl" class="fav-team-placeholder">{{ getTeamInitials(team.name) }}</div>
+        <span class="fav-team-name">{{ team.name }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Omiljene lige -->
+  <div class="favorite-block" *ngIf="favoriteLeagues.length > 0">
+    <div class="block-title">Lige</div>
+    <div class="favorite-leagues-grid">
+      <div class="fav-league-card" *ngFor="let league of favoriteLeagues" [routerLink]="['/leagues', league.id]">
+        <img *ngIf="league.logoUrl" [src]="league.logoUrl" class="fav-league-logo" alt="logo" (error)="league.logoUrl = ''"/>
+        <div *ngIf="!league.logoUrl" class="fav-league-placeholder">{{ league.name.charAt(0) }}</div>
+        <div>
+          <div class="fav-league-name">{{ league.name }}</div>
+          <div class="fav-league-country">{{ league.country }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mečevi omiljenih timova -->
+  <div class="favorite-block" *ngIf="favoriteTeamsMatches.length > 0">
+    <div class="block-title">Mečevi tvojih timova</div>
+    <div class="matches-container">
+      <div class="match-item" *ngFor="let match of favoriteTeamsMatches">
+        <div class="mi-league">{{ match.league?.name }}</div>
+        <div class="mi-teams">
+          <div class="mi-team-row">
+            <img *ngIf="match.homeTeam?.logoUrl" [src]="match.homeTeam?.logoUrl" class="mi-team-logo-img" alt="logo" (error)="match.homeTeam!.logoUrl = ''"/>
+            <div *ngIf="!match.homeTeam?.logoUrl" class="mi-team-logo">{{ getTeamInitials(match.homeTeam?.name) }}</div>
+            <span class="mi-team-name">{{ match.homeTeam?.name }}</span>
+          </div>
+          <div class="mi-team-row">
+            <img *ngIf="match.awayTeam?.logoUrl" [src]="match.awayTeam?.logoUrl" class="mi-team-logo-img" alt="logo" (error)="match.awayTeam!.logoUrl = ''"/>
+            <div *ngIf="!match.awayTeam?.logoUrl" class="mi-team-logo">{{ getTeamInitials(match.awayTeam?.name) }}</div>
+            <span class="mi-team-name">{{ match.awayTeam?.name }}</span>
+          </div>
+        </div>
+        <div class="mi-scores">
+          <span class="mi-score" [class.winner]="(match.homeScore ?? 0) > (match.awayScore ?? 0) && match.status === 'FINISHED'">
+            {{ match.status === 'SCHEDULED' ? '-' : match.homeScore }}
+          </span>
+          <span class="mi-score" [class.winner]="(match.awayScore ?? 0) > (match.homeScore ?? 0) && match.status === 'FINISHED'">
+            {{ match.status === 'SCHEDULED' ? '-' : match.awayScore }}
+          </span>
+        </div>
+        <div class="mi-status">
+          <span class="mi-live" *ngIf="match.status === 'LIVE'">● LIVE</span>
+          <span class="mi-time" *ngIf="match.status === 'FINISHED'" style="color:#6b7a8d;">Kraj</span>
+          <span class="mi-time" *ngIf="match.status === 'SCHEDULED'">{{ match.matchDate | date:'HH:mm' }}</span>
+          <span class="mi-time" *ngIf="match.status === 'POSTPONED'" style="color:#ffaa2c;">Odgođen</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
   <div class="section">
     <div class="section-header">
       <span class="section-title">Sportovi</span>

@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Route, Router, RouterLink } from '@angular/router';
 import { Navbar } from '../../shared/navbar/navbar';
 import { Footer } from '../../shared/footer/footer';
 import { TeamService } from '../../../services/team.service';
@@ -10,6 +10,9 @@ import { LeagueService } from '../../../services/league.service';
 import { Team } from '../../../models/team.model';
 import { Sport } from '../../../models/sport.model';
 import { League } from '../../../models/league.model';
+import { AuthService } from '../../../services/auth.service';
+import { FavoriteService } from '../../../services/favorite.service';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-teams-page',
@@ -22,6 +25,8 @@ export class TeamsPage implements OnInit {
   teams: Team[] = [];
   sports: Sport[] = [];
   leagues: League[] = [];
+  
+  favoriteTeamsId : Set<number> = new Set();
 
   selectedSportId: number | null = null;
   selectedLeagueId: number | null = null;
@@ -30,14 +35,60 @@ export class TeamsPage implements OnInit {
     private teamService: TeamService,
     private sportService: SportService,
     private leagueService: LeagueService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private authService : AuthService,
+    private favoriteService: FavoriteService,
+    private toastService: ToastService,
+    private router : Router
   ) {}
 
   ngOnInit() {
     this.loadTeams();
     this.loadSports();
     this.loadLeagues();
+    if(this.authService.isLoggedIn()){
+      this.loadFavorites();
+    }
   }
+  loadFavorites() {
+    this.favoriteService.getFavoriteTeams().subscribe({
+      next: (data) => {
+        this.favoriteTeamsId = new Set(data.map(l => l.id!));
+        this.cdr.detectChanges();
+      }
+    })
+  }
+
+  isFavorite(teamId:number):boolean{
+    return this.favoriteTeamsId.has(teamId);
+  }
+
+  toggleFavorite(event: Event, teamId: number) {
+  event.stopPropagation();
+  event.preventDefault();
+
+  if (!this.authService.isLoggedIn()) {
+    this.toastService.info('Prijavi se da bi dodao tim u favorite');
+    this.router.navigate(['/login']);
+    return;
+  }
+
+  const wasAlreadyFavorite = this.favoriteTeamsId.has(teamId);
+
+  this.favoriteService.toggleTeamFavorite(teamId).subscribe({
+    next: () => {
+      if (wasAlreadyFavorite) {
+        this.favoriteTeamsId.delete(teamId);
+        this.toastService.info('Tim uklonjen iz favorita');
+      } else {
+        this.favoriteTeamsId.add(teamId);
+        this.toastService.success('Tim dodan u favorite');
+      }
+      this.cdr.detectChanges();
+    },
+    error: () => this.toastService.error('Greška pri ažuriranju favorita')
+  });
+}
 
   loadTeams() {
     this.teamService.getAll().subscribe({

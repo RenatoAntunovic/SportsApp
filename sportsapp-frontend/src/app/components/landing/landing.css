@@ -604,3 +604,153 @@
 app-footer {
   margin-top: auto;
 }
+.favorites-section {
+  background: linear-gradient(135deg, rgba(255, 170, 44, 0.05) 0%, rgba(0, 212, 170, 0.03) 100%);
+  border-radius: 16px;
+  padding: 30px 40px !important;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.favorite-block {
+  margin-bottom: 28px;
+}
+
+.favorite-block:last-child {
+  margin-bottom: 0;
+}
+
+.block-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #8a99b0;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 12px;
+}
+
+.favorite-teams-grid {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.fav-team-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: #0d1f35;
+  border: 1px solid rgba(255, 170, 44, 0.2);
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 180ms;
+}
+
+.fav-team-card:hover {
+  border-color: rgba(255, 170, 44, 0.5);
+  transform: translateY(-2px);
+}
+
+.fav-team-logo,
+.fav-team-placeholder {
+  width: 28px !important;
+  height: 28px !important;
+  max-width: 28px !important;
+  max-height: 28px !important;
+  border-radius: 50%;
+  object-fit: contain;
+  background: rgba(255, 255, 255, 0.05);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00d4aa;
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.fav-team-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #e0e8f0;
+}
+
+.favorite-leagues-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.fav-league-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: #0d1f35;
+  border: 1px solid rgba(255, 170, 44, 0.2);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 180ms;
+}
+
+.fav-league-card:hover {
+  border-color: rgba(255, 170, 44, 0.5);
+  transform: translateY(-2px);
+}
+
+.fav-league-logo,
+.fav-league-placeholder {
+  width: 36px !important;
+  height: 36px !important;
+  max-width: 36px !important;
+  max-height: 36px !important;
+  border-radius: 8px;
+  object-fit: contain;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 4px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00d4aa;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.fav-league-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+.fav-league-country {
+  font-size: 11px;
+  color: #6b7a8d;
+}
+
+.empty-favorites {
+  text-align: center;
+  padding: 30px 20px;
+}
+
+.empty-favorites p {
+  color: #e0e8f0;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.empty-favorites .empty-hint {
+  color: #6b7a8d;
+  font-size: 13px;
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+
+.empty-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
