@@ -31,12 +31,14 @@ export class TeamsPage implements OnInit {
   selectedSportId: number | null = null;
   selectedLeagueId: number | null = null;
 
+  showOnlyFavorites = false;
+
   constructor(
     private teamService: TeamService,
     private sportService: SportService,
     private leagueService: LeagueService,
     private cdr: ChangeDetectorRef,
-    private authService : AuthService,
+    public authService : AuthService,
     private favoriteService: FavoriteService,
     private toastService: ToastService,
     private router : Router
@@ -120,16 +122,19 @@ export class TeamsPage implements OnInit {
     return this.leagues.filter(l => l.sport?.id === this.selectedSportId);
   }
 
-  get filteredTeams(): Team[] {
-    let result = this.teams;
-    if (this.selectedSportId) {
-      result = result.filter(t => t.sport?.id === this.selectedSportId);
-    }
-    if (this.selectedLeagueId) {
-      result = result.filter(t => t.league?.id === this.selectedLeagueId);
-    }
-    return result;
+ get filteredTeams(): Team[] {
+  let result = this.teams;
+  if (this.selectedSportId) {
+    result = result.filter(t => t.sport?.id === this.selectedSportId);
   }
+  if (this.selectedLeagueId) {
+    result = result.filter(t => t.league?.id === this.selectedLeagueId);
+  }
+  if (this.showOnlyFavorites) {
+    result = result.filter(t => this.favoriteTeamsId.has(t.id!));
+  }
+  return result;
+}
 
   getTeamInitials(name: string | undefined): string {
     if (!name) return '?';

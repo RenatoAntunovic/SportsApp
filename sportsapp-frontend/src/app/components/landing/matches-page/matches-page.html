@@ -22,6 +22,13 @@
           <option *ngFor="let league of filteredLeagues" [ngValue]="league.id">{{ league.name }}</option>
         </select>
       </div>
+      <div class="filter-group">
+  <label>Datum</label>
+  <div class="date-input-wrapper">
+    <input class="date-input" type="date" [(ngModel)]="selectedDate" />
+    <button *ngIf="selectedDate" class="clear-date-btn" (click)="clearDate()">×</button>
+  </div>
+</div>
     </div>
 
     <div class="matches-container">
@@ -54,11 +61,10 @@
           </span>
         </div>
         <div class="mi-status">
-          <span class="mi-live" *ngIf="match.status === 'LIVE'">● LIVE</span>
-          <span class="mi-time" *ngIf="match.status === 'FINISHED'" style="color:#6b7a8d;">Kraj</span>
-          <span class="mi-time" *ngIf="match.status === 'SCHEDULED'">{{ match.matchDate | date:'dd.MM HH:mm' }}</span>
-          <span class="mi-time" *ngIf="match.status === 'POSTPONED'" style="color:#ffaa2c;">Odgođen</span>
-        </div>
+  <span class="mi-live" *ngIf="match.status === 'LIVE'">● LIVE</span>
+  <span class="mi-time" *ngIf="match.status !== 'LIVE'">{{ match.matchDate | date:'dd.MM HH:mm' }}</span>
+  <span class="mi-time mi-postponed" *ngIf="match.status === 'POSTPONED'">Odgođen</span>
+</div>
       </div>
       <div *ngIf="filteredMatches.length === 0" class="empty-msg">
         Nema mečeva za ovaj filter.

@@ -17,6 +17,7 @@
           <th>ID</th>
           <th>Ikonica</th>
           <th>Naziv</th>
+          <th>Tip</th>
           <th>Icon URL</th>
           <th>Akcije</th>
         </tr>
@@ -29,6 +30,10 @@
             <span *ngIf="!sport.iconUrl" class="no-icon">—</span>
           </td>
           <td class="td-name">{{ sport.name }}</td>
+          <td>
+            <span class="type-badge" *ngIf="sport.type">{{ sport.type }}</span>
+            <span *ngIf="!sport.type" class="no-icon">—</span>
+          </td>
           <td class="td-url">{{ sport.iconUrl || '—' }}</td>
           <td>
             <div class="action-btns">
@@ -44,7 +49,7 @@
           </td>
         </tr>
         <tr *ngIf="sports.length === 0">
-          <td colspan="5" class="empty-row">Nema sportova. Dodaj prvi sport!</td>
+          <td colspan="6" class="empty-row">Nema sportova. Dodaj prvi sport!</td>
         </tr>
       </tbody>
     </table>
@@ -68,6 +73,12 @@
         <label class="form-label">Icon URL</label>
         <input class="form-input" type="text" [(ngModel)]="form.iconUrl" placeholder="https://..." />
       </div>
+      <div class="form-group">
+      <label class="form-label">Tip sporta</label>
+      <select class="form-input" [(ngModel)]="form.type">
+        <option *ngFor="let type of sportTypes" [ngValue]="type.value">{{ type.label }}</option>
+     </select>
+    </div>
       <div class="icon-preview" *ngIf="form.iconUrl">
         <img [src]="form.iconUrl" alt="preview" class="sport-icon-img" />
         <span class="preview-label">Preview</span>

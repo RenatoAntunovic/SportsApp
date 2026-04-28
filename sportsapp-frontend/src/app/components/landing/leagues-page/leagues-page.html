@@ -5,15 +5,26 @@
       <h1>Lige</h1>
       <p>Sve lige iz cijelog svijeta</p>
     </div>
-    <div class="filter-bar">
-      <div class="filter-group">
-        <label>Sport</label>
-        <select [(ngModel)]="selectedSportId">
-          <option [ngValue]="null">Svi sportovi</option>
-          <option *ngFor="let sport of sports" [ngValue]="sport.id">{{ sport.name }}</option>
-        </select>
-      </div>
-    </div>
+   <div class="filter-bar">
+  <div class="filter-group">
+    <label>Sport</label>
+    <select [(ngModel)]="selectedSportId">
+      <option [ngValue]="null">Svi sportovi</option>
+      <option *ngFor="let sport of sports" [ngValue]="sport.id">{{ sport.name }}</option>
+    </select>
+  </div>
+
+  <div class="filter-toggle" *ngIf="authService.isLoggedIn()">
+    <button class="toggle-btn" 
+            [class.active]="showOnlyFavorites"
+            (click)="showOnlyFavorites = !showOnlyFavorites">
+      <svg width="16" height="16" viewBox="0 0 24 24" [attr.fill]="showOnlyFavorites ? '#ffaa2c' : 'none'" stroke="currentColor" stroke-width="2">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+      </svg>
+      Samo omiljeni
+    </button>
+  </div>
+</div>
     <div class="leagues-grid">
       <div class="league-card" *ngFor="let league of filteredLeagues" [routerLink]="['/leagues', league.id]">
         <button class="favorite-btn" 

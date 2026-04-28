@@ -21,54 +21,75 @@
     </div>
 
     <div class="tab-content" *ngIf="activeTab === 'STANDINGS'">
-      <div class="standings-container" *ngIf="standings.length > 0">
-        <table class="standings-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Tim</th>
-              <th>P</th>
-              <th>W</th>
-              <th>D</th>
-              <th>L</th>
-              <th>GF</th>
-              <th>GA</th>
-              <th>GD</th>
-              <th>PTS</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let s of standings">
-              <td>
-                <span class="position-badge" [class.top]="s.position <= 4" [class.bottom]="s.position >= standings.length - 2">
-                  {{ s.position }}
-                </span>
-              </td>
-              <td>
-                <div class="team-cell">
-                  <img *ngIf="s.team?.logoUrl" [src]="s.team?.logoUrl" class="team-logo-sm" alt="logo" (error)="s.team!.logoUrl = ''"/>
-                  <div *ngIf="!s.team?.logoUrl" class="team-logo-placeholder">{{ getTeamInitials(s.team?.name) }}</div>
-                  <span class="team-name">{{ s.team?.name }}</span>
-                </div>
-              </td>
-              <td>{{ s.played }}</td>
-              <td class="won">{{ s.won }}</td>
-              <td class="drawn">{{ s.drawn }}</td>
-              <td class="lost">{{ s.lost }}</td>
-              <td>{{ s.goalsFor }}</td>
-              <td>{{ s.goalsAgainst }}</td>
-              <td [class.positive]="getGoalDifference(s) > 0" [class.negative]="getGoalDifference(s) < 0">
-                {{ getGoalDifference(s) > 0 ? '+' : '' }}{{ getGoalDifference(s) }}
-              </td>
-              <td class="pts">{{ s.points }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="empty-msg" *ngIf="standings.length === 0">
-        Nema standings-a za ovu ligu. Dodaj FINISHED mečeve da se generišu!
-      </div>
-    </div>
+  <div class="standings-container" *ngIf="standings.length > 0">
+    <table class="standings-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Tim</th>
+          <th>P</th>
+          <th>W</th>
+          <th *ngIf="!isBasketball">D</th>
+          <th>L</th>
+          <th *ngIf="isBasketball">PCT</th>
+          <th>{{ scoreLabels.for }}</th>
+          <th>{{ scoreLabels.against }}</th>
+          <th>{{ scoreLabels.diff }}</th>
+          <th *ngIf="!isBasketball">PTS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of standings">
+          <td>
+           <span class="position-badge" 
+      [class.top]="isFootball && s.position <= 4"
+      [class.europa]="isFootball && s.position === 5"
+      [class.bottom]="isFootball && s.position >= standings.length - 2"
+      [class.basketball-top]="isBasketball && s.position <= 4"
+      [class.basketball-bottom]="isBasketball && s.position >= standings.length - 2">
+  {{ s.position }}
+</span>
+          </td>
+          <td>
+            <div class="team-cell">
+              <img *ngIf="s.team?.logoUrl" [src]="s.team?.logoUrl" class="team-logo-sm" alt="logo" (error)="s.team!.logoUrl = ''"/>
+              <div *ngIf="!s.team?.logoUrl" class="team-logo-placeholder">{{ getTeamInitials(s.team?.name) }}</div>
+              <span class="team-name">{{ s.team?.name }}</span>
+            </div>
+          </td>
+          <td>{{ s.played }}</td>
+          <td class="won">{{ s.won }}</td>
+          <td *ngIf="!isBasketball" class="drawn">{{ s.drawn }}</td>
+          <td class="lost">{{ s.lost }}</td>
+          <td *ngIf="isBasketball" class="pts">{{ getWinPercentage(s) }}</td>
+          <td>{{ s.goalsFor }}</td>
+          <td>{{ s.goalsAgainst }}</td>
+          <td [class.positive]="getScoreDifference(s) > 0" [class.negative]="getScoreDifference(s) < 0">
+            {{ getScoreDifference(s) > 0 ? '+' : '' }}{{ getScoreDifference(s) }}
+          </td>
+          <td *ngIf="!isBasketball" class="pts">{{ s.points }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="standings-legend" *ngIf="isFootball">
+  <div class="legend-item">
+    <span class="legend-dot top"></span>
+    <span>Liga prvaka</span>
+  </div>
+  <div class="legend-item">
+    <span class="legend-dot europa"></span>
+    <span>Europa liga</span>
+  </div>
+  <div class="legend-item">
+    <span class="legend-dot bottom"></span>
+    <span>Relegacija</span>
+  </div>
+</div>
+  </div>
+  <div class="empty-msg" *ngIf="standings.length === 0">
+    Nema standings-a za ovu ligu. Dodaj FINISHED mečeve da se generišu!
+  </div>
+</div>
 
     <div class="tab-content" *ngIf="activeTab === 'MATCHES'">
       <div class="matches-container" *ngIf="matches.length > 0">
@@ -94,11 +115,10 @@
             </span>
           </div>
           <div class="mi-status">
-            <span class="mi-live" *ngIf="match.status === 'LIVE'">● LIVE</span>
-            <span class="mi-time" *ngIf="match.status === 'FINISHED'">Kraj</span>
-            <span class="mi-time" *ngIf="match.status === 'SCHEDULED'">{{ match.matchDate | date:'dd.MM HH:mm' }}</span>
-            <span class="mi-time" *ngIf="match.status === 'POSTPONED'" style="color:#ffaa2c;">Odgođen</span>
-          </div>
+  <span class="mi-live" *ngIf="match.status === 'LIVE'">● LIVE</span>
+  <span class="mi-time" *ngIf="match.status !== 'LIVE'">{{ match.matchDate | date:'dd.MM HH:mm' }}</span>
+  <span class="mi-time mi-postponed" *ngIf="match.status === 'POSTPONED'">Odgođen</span>
+</div>
         </div>
       </div>
       <div class="empty-msg" *ngIf="matches.length === 0">

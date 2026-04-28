@@ -23,14 +23,14 @@ export class LeaguesPage implements OnInit {
   leagues: League[] = [];
   sports: Sport[] = [];
   favoriteLeagueIds: Set<number> = new Set();
-
+showOnlyFavorites = false;
   selectedSportId: number | null = null;
 
   constructor(
     private leagueService: LeagueService,
     private sportService: SportService,
     private favoriteService: FavoriteService,
-    private authService: AuthService,
+    public authService: AuthService,
     private router: Router,
     private cdr: ChangeDetectorRef,
     private toastService : ToastService
@@ -103,7 +103,16 @@ export class LeaguesPage implements OnInit {
 }
 
   get filteredLeagues(): League[] {
-    if (!this.selectedSportId) return this.leagues;
-    return this.leagues.filter(x => x.sport?.id == this.selectedSportId);
+    let result = this.leagues;
+
+    if(this.selectedSportId){
+      result = result.filter(x => x.sport?.id == this.selectedSportId);
+    }
+
+    if(this.showOnlyFavorites){
+      result = result.filter(x => this.favoriteLeagueIds.has(x.id!));
+    }
+
+    return result;
   }
 }

@@ -93,12 +93,11 @@
               {{ match.status === 'SCHEDULED' ? '-' : match.awayScore }}
             </span>
           </div>
-          <div class="mi-status">
-            <span class="mi-live" *ngIf="match.status === 'LIVE'">● LIVE</span>
-            <span class="mi-time" *ngIf="match.status === 'FINISHED'">Kraj</span>
-            <span class="mi-time" *ngIf="match.status === 'SCHEDULED'">{{ match.matchDate | date:'dd.MM HH:mm' }}</span>
-            <span class="mi-time" *ngIf="match.status === 'POSTPONED'" style="color:#ffaa2c;">Odgođen</span>
-          </div>
+         <div class="mi-status">
+  <span class="mi-live" *ngIf="match.status === 'LIVE'">● LIVE</span>
+  <span class="mi-time" *ngIf="match.status !== 'LIVE'">{{ match.matchDate | date:'dd.MM HH:mm' }}</span>
+  <span class="mi-time mi-postponed" *ngIf="match.status === 'POSTPONED'">Odgođen</span>
+</div>
         </div>
       </div>
       <div *ngIf="matches.length === 0" class="empty-msg">

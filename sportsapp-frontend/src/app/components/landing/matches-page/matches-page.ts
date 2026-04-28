@@ -22,6 +22,7 @@ export class MatchesPage implements OnInit {
   sports: Sport[] = [];
   leagues: League[] = [];
 
+  selectedDate: string = '';
   selectedSportId: number | null = null;
   selectedLeagueId: number | null = null;
   activeTab: 'ALL' | 'LIVE' | 'SCHEDULED' | 'FINISHED' = 'ALL';
@@ -69,21 +70,33 @@ export class MatchesPage implements OnInit {
     return this.leagues.filter(l => l.sport?.id === this.selectedSportId);
   }
 
-  get filteredMatches(): Match[] {
-    let result = this.matches;
+ get filteredMatches(): Match[] {
+  let result = this.matches;
 
-    if (this.selectedSportId) {
-      result = result.filter(m => m.league?.sport?.id === this.selectedSportId);
-    }
-    if (this.selectedLeagueId) {
-      result = result.filter(m => m.league?.id === this.selectedLeagueId);
-    }
-    if (this.activeTab !== 'ALL') {
-      result = result.filter(m => m.status === this.activeTab);
-    }
-
-    return result;
+  if (this.selectedSportId) {
+    result = result.filter(m => m.league?.sport?.id === this.selectedSportId);
   }
+  if (this.selectedLeagueId) {
+    result = result.filter(m => m.league?.id === this.selectedLeagueId);
+  }
+  if (this.activeTab !== 'ALL') {
+    result = result.filter(m => m.status === this.activeTab);
+  }
+  
+  // Filter po datumu
+  if (this.selectedDate) {
+    result = result.filter(m => {
+      if (!m.matchDate) return false;
+      return m.matchDate.startsWith(this.selectedDate);
+    });
+  }
+
+  return result;
+}
+
+clearDate() {
+  this.selectedDate = '';
+}
 
   setTab(tab: 'ALL' | 'LIVE' | 'SCHEDULED' | 'FINISHED') {
     this.activeTab = tab;

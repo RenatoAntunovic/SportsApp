@@ -14,7 +14,7 @@
         <button class="hbtn-primary" routerLink="/matches">Pogledaj rezultate</button>
       </div>
       <div class="hero-stats">
-        <div><div class="hstat-num">{{ sportsCount }}</div><div class="hstat-label">Sportova</div></div>
+        <div><div class="hstat-num">{{ sportsCount }}</div><div class="hstat-label">Sporta</div></div>
         <div><div class="hstat-num">{{ leaguesCount }}</div><div class="hstat-label">Liga</div></div>
         <div><div class="hstat-num">{{ teamsCount }}</div><div class="hstat-label">Timova</div></div>
         <div><div class="hstat-num">{{ matchesCount }}</div><div class="hstat-label">Mečeva</div></div>
@@ -121,32 +121,14 @@
           </span>
         </div>
         <div class="mi-status">
-          <span class="mi-live" *ngIf="match.status === 'LIVE'">● LIVE</span>
-          <span class="mi-time" *ngIf="match.status === 'FINISHED'" style="color:#6b7a8d;">Kraj</span>
-          <span class="mi-time" *ngIf="match.status === 'SCHEDULED'">{{ match.matchDate | date:'HH:mm' }}</span>
-          <span class="mi-time" *ngIf="match.status === 'POSTPONED'" style="color:#ffaa2c;">Odgođen</span>
-        </div>
+  <span class="mi-live" *ngIf="match.status === 'LIVE'">● LIVE</span>
+  <span class="mi-time" *ngIf="match.status !== 'LIVE'">{{ match.matchDate | date:'dd.MM HH:mm' }}</span>
+  <span class="mi-time mi-postponed" *ngIf="match.status === 'POSTPONED'">Odgođen</span>
+</div>
       </div>
     </div>
   </div>
 </div>
-
-  <div class="section">
-    <div class="section-header">
-      <span class="section-title">Sportovi</span>
-    </div>
-    <div class="sports-grid">
-      <div class="sport-card" *ngFor="let sport of sports">
-        <img *ngIf="sport.iconUrl" [src]="sport.iconUrl" class="sport-icon-img-lg" alt="icon" (error)="sport.iconUrl = ''" />
-        <div *ngIf="!sport.iconUrl" class="sport-icon-placeholder">{{ sport.name.charAt(0) }}</div>
-        <div>
-          <div class="sport-name">{{ sport.name }}</div>
-          <div class="sport-count">{{ getLeagueCountForSport(sport.id!) }} liga</div>
-        </div>
-      </div>
-      <div *ngIf="sports.length === 0" style="color:#6b7a8d;">Nema sportova.</div>
-    </div>
-  </div>
 
   <div class="matches-section">
     <div class="section-header">

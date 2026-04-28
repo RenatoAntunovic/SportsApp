@@ -28,6 +28,7 @@ public class SportService {
     public Sport update(Long id , Sport updatedSport){
         Sport existing = getById(id);
         existing.setName(updatedSport.getName());
+        existing.setType(updatedSport.getType());
         existing.setIconUrl(updatedSport.getIconUrl());
         return  sportRepository.save(existing);
     }

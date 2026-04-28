@@ -18,6 +18,7 @@ import { adminGuard } from './guards/admin-guard';
 import { landingGuard } from './guards/landing/landing-guard';
 import { LeagueDetail } from './components/landing/league-detail/league-detail';
 import { TeamDetail } from './components/landing/team-detail/team-detail';
+import { Profile } from './components/profile/profile';
 
 export const routes: Routes = [
   { path: '', component: LandingComponent, canActivate: [landingGuard] },
@@ -29,6 +30,7 @@ export const routes: Routes = [
   { path: 'leagues/:id',component : LeagueDetail},
   { path: 'players', component: PlayersPage },
   {path: 'teams/:id',component :  TeamDetail},
+  {path: 'profile', component: Profile ,canActivate: [authGuard]},
   {
     path: 'admin',
     component: AdminLayout,

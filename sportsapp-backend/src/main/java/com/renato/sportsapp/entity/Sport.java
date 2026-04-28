@@ -13,4 +13,7 @@ public class Sport {
     private String name;
     @Column(columnDefinition = "TEXT")
     private String iconUrl;
+
+    @Enumerated(EnumType.STRING)
+    private SportType type;
 }

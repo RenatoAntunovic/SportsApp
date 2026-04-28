@@ -1,9 +1,6 @@
 package com.renato.sportsapp.service;
 
-import com.renato.sportsapp.entity.League;
-import com.renato.sportsapp.entity.Match;
-import com.renato.sportsapp.entity.Standing;
-import com.renato.sportsapp.entity.Team;
+import com.renato.sportsapp.entity.*;
 import com.renato.sportsapp.repository.MatchRepository;
 import com.renato.sportsapp.repository.StandingRepository;
 import jakarta.transaction.Transactional;
@@ -63,6 +60,20 @@ public class StandingService {
                 .filter(m -> "FINISHED".equals(m.getStatus()))
                 .toList();
 
+        if (matches.isEmpty()) return;
+
+        SportType sportType = matches.get(0).getLeague().getSport().getType();
+        if (sportType == null) sportType = SportType.OTHER;
+
+        System.out.println("=== RECALCULATE ===");
+        System.out.println("League ID: " + leagueId);
+        System.out.println("Sport: " + matches.get(0).getLeague().getSport().getName());
+        System.out.println("Type: " + sportType);
+
+        if (sportType == SportType.TENNIS) return;
+
+        // ... ostatak metode
+
         Map<Long, Standing> standingsMap = new HashMap<>();
 
         for (Match match : matches) {
@@ -86,35 +97,91 @@ public class StandingService {
             awayStanding.setGoalsFor(awayStanding.getGoalsFor() + awayScore);
             awayStanding.setGoalsAgainst(awayStanding.getGoalsAgainst() + homeScore);
 
-            if (homeScore > awayScore) {
-                homeStanding.setWon(homeStanding.getWon() + 1);
-                homeStanding.setPoints(homeStanding.getPoints() + 3);
-                awayStanding.setLost(awayStanding.getLost() + 1);
-            } else if (homeScore < awayScore) {
-                awayStanding.setWon(awayStanding.getWon() + 1);
-                awayStanding.setPoints(awayStanding.getPoints() + 3);
-                homeStanding.setLost(homeStanding.getLost() + 1);
-            } else {
-                homeStanding.setDrawn(homeStanding.getDrawn() + 1);
-                awayStanding.setDrawn(awayStanding.getDrawn() + 1);
-                homeStanding.setPoints(homeStanding.getPoints() + 1);
-                awayStanding.setPoints(awayStanding.getPoints() + 1);
-            }
+            // Različita logika po tipu sporta
+            applyMatchResult(sportType, homeStanding, awayStanding, homeScore, awayScore);
         }
 
-        List<Standing> sorted = new ArrayList<>(standingsMap.values());
-        sorted.sort((a, b) -> {
-            if (!a.getPoints().equals(b.getPoints())) return b.getPoints() - a.getPoints();
-            int gdA = a.getGoalsFor() - a.getGoalsAgainst();
-            int gdB = b.getGoalsFor() - b.getGoalsAgainst();
-            if (gdA != gdB) return gdB - gdA;
-            return b.getGoalsFor() - a.getGoalsFor();
-        });
+        // Različito sortiranje po tipu sporta
+        List<Standing> sorted = sortStandings(sportType, new ArrayList<>(standingsMap.values()));
 
         for (int i = 0; i < sorted.size(); i++) {
             sorted.get(i).setPosition(i + 1);
         }
         standingRepository.saveAll(sorted);
+    }
+
+    private void applyMatchResult(SportType type, Standing home, Standing away, int homeScore, int awayScore) {
+        switch (type) {
+            case BASKETBALL -> {
+                // Košarka: 1 bod za pobjedu, nema nerješeno
+                if (homeScore > awayScore) {
+                    home.setWon(home.getWon() + 1);
+                    home.setPoints(home.getPoints() + 1);
+                    away.setLost(away.getLost() + 1);
+                } else if (homeScore < awayScore) {
+                    away.setWon(away.getWon() + 1);
+                    away.setPoints(away.getPoints() + 1);
+                    home.setLost(home.getLost() + 1);
+                }
+                // Ako je nerješeno u košarci, ne računa se (overtime mora odlučiti)
+            }
+            case HOCKEY -> {
+                // Hokej: 2 boda za pobjedu, nerješeno → 1 svakome
+                if (homeScore > awayScore) {
+                    home.setWon(home.getWon() + 1);
+                    home.setPoints(home.getPoints() + 2);
+                    away.setLost(away.getLost() + 1);
+                } else if (homeScore < awayScore) {
+                    away.setWon(away.getWon() + 1);
+                    away.setPoints(away.getPoints() + 2);
+                    home.setLost(home.getLost() + 1);
+                } else {
+                    home.setDrawn(home.getDrawn() + 1);
+                    away.setDrawn(away.getDrawn() + 1);
+                    home.setPoints(home.getPoints() + 1);
+                    away.setPoints(away.getPoints() + 1);
+                }
+            }
+            default -> {
+                // FOOTBALL i OTHER: standardno 3 za pobjedu, 1 za nerješeno
+                if (homeScore > awayScore) {
+                    home.setWon(home.getWon() + 1);
+                    home.setPoints(home.getPoints() + 3);
+                    away.setLost(away.getLost() + 1);
+                } else if (homeScore < awayScore) {
+                    away.setWon(away.getWon() + 1);
+                    away.setPoints(away.getPoints() + 3);
+                    home.setLost(home.getLost() + 1);
+                } else {
+                    home.setDrawn(home.getDrawn() + 1);
+                    away.setDrawn(away.getDrawn() + 1);
+                    home.setPoints(home.getPoints() + 1);
+                    away.setPoints(away.getPoints() + 1);
+                }
+            }
+        }
+    }
+
+    private List<Standing> sortStandings(SportType type, List<Standing> standings) {
+        if (type == SportType.BASKETBALL) {
+            // Košarka: po win percentage, pa po pobjedama
+            standings.sort((a, b) -> {
+                double pctA = a.getPlayed() > 0 ? (double) a.getWon() / a.getPlayed() : 0;
+                double pctB = b.getPlayed() > 0 ? (double) b.getWon() / b.getPlayed() : 0;
+                if (pctA != pctB) return Double.compare(pctB, pctA);
+                return b.getWon() - a.getWon();
+            });
+        } else {
+            // FOOTBALL, HOCKEY, OTHER: po bodovima, gol razlici, datim golovima
+            standings.sort((a, b) -> {
+                if (!a.getPoints().equals(b.getPoints())) return b.getPoints() - a.getPoints();
+                int gdA = a.getGoalsFor() - a.getGoalsAgainst();
+                int gdB = b.getGoalsFor() - b.getGoalsAgainst();
+                if (gdA != gdB) return gdB - gdA;
+                return b.getGoalsFor() - a.getGoalsFor();
+            });
+        }
+        return standings;
     }
 
     private Standing createEmptyStanding(Team team, League league) {

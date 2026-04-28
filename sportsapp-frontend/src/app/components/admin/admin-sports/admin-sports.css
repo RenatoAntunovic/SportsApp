@@ -259,3 +259,12 @@
 }
 
 .btn-save:hover { background: #00b894; }
+
+.type-badge {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: rgba(0, 212, 170, 0.1);
+  color: #00d4aa;
+  font-weight: 600;
+}

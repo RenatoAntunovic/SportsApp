@@ -17,7 +17,17 @@ export class AdminSports implements OnInit {
   editMode = false;
   editId: number | null = null;
   saving = false;
-  form: Sport = { name: '', iconUrl: '' };
+
+
+  sportTypes: { value: string; label: string }[] = [
+  { value: 'FOOTBALL', label: 'Fudbal (3 boda za pobjedu)' },
+  { value: 'BASKETBALL', label: 'Košarka (1 bod, bez nerješeno)' },
+  { value: 'HOCKEY', label: 'Hokej (2 boda + OT)' },
+  { value: 'TENNIS', label: 'Tenis (bez tabele)' },
+  { value: 'OTHER', label: 'Ostalo' }
+];
+
+form: Sport = { name: '', iconUrl: '', type: 'OTHER' };
 
   constructor(
     private sportService: SportService,
@@ -39,18 +49,18 @@ export class AdminSports implements OnInit {
   }
 
   openModal(sport?: Sport) {
-    this.saving = false;
-    if (sport) {
-      this.editMode = true;
-      this.editId = sport.id!;
-      this.form = { ...sport };
-    } else {
-      this.editMode = false;
-      this.editId = null;
-      this.form = { name: '', iconUrl: '' };
-    }
-    this.showModal = true;
+  this.saving = false;
+  if (sport) {
+    this.editMode = true;
+    this.editId = sport.id!;
+    this.form = { ...sport };
+  } else {
+    this.editMode = false;
+    this.editId = null;
+    this.form = { name: '', iconUrl: '', type: 'OTHER' }; 
   }
+  this.showModal = true;
+}
 
   closeModal() {
     this.saving = false;

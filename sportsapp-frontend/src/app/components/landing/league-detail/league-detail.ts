@@ -79,9 +79,32 @@ export class LeagueDetail implements OnInit {
     if (words.length >= 2) return (words[0][0] + words[1][0]).toUpperCase();
     return name.substring(0, 2).toUpperCase();
   }
-
-  getGoalDifference(s: Standing): number {
-    return s.goalsFor - s.goalsAgainst;
-  }
   
+  get isBasketball(): boolean {
+  return this.league?.sport?.type === 'BASKETBALL';
+}
+
+get scoreLabels() {
+  // PA/PF za košarku, GA/GF za ostalo
+  return this.isBasketball 
+    ? { for: 'PF', against: 'PA', diff: 'PD' }
+    : { for: 'GF', against: 'GA', diff: 'GD' };
+}
+
+getScoreDifference(s: Standing): number {
+  return s.goalsFor - s.goalsAgainst;
+}
+
+// Win percentage za košarku
+getWinPercentage(s: Standing): string {
+  if (s.played === 0) return '.000';
+  const pct = s.won/s.played;
+  if(pct === 1)
+    return '1.000';
+  return pct.toFixed(3).substring(1); 
+}
+
+get isFootball(): boolean{
+  return this.league?.sport?.type === 'FOOTBALL';
+}
 }

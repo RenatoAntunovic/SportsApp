@@ -189,3 +189,34 @@
   color: #ffaa2c;
 }
 
+.filter-toggle {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #0a1628;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7a8d;
+  cursor: pointer;
+  transition: all 180ms;
+}
+
+.toggle-btn:hover {
+  border-color: rgba(255, 170, 44, 0.3);
+  color: #e0e8f0;
+}
+
+.toggle-btn.active {
+  background: rgba(255, 170, 44, 0.1);
+  border-color: rgba(255, 170, 44, 0.4);
+  color: #ffaa2c;
+}
