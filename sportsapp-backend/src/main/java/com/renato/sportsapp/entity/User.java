@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,6 +28,13 @@ public class User {
 
     @Column(nullable = false)
     private String password;
+
+    @Column(name = "created_at",updatable = false)
+    private LocalDateTime createdAt;
+    @PrePersist
+    protected  void onCreate(){
+        this.createdAt = LocalDateTime.now();
+    }
 
     @Column(unique = true)
     private String email;
