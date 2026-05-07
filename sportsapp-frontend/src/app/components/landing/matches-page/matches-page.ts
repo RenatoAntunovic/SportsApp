@@ -9,11 +9,12 @@ import { LeagueService } from '../../../services/league.service';
 import { Match } from '../../../models/match.model';
 import { Sport } from '../../../models/sport.model';
 import { League } from '../../../models/league.model';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-matches-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, Navbar, Footer],
+  imports: [CommonModule, FormsModule, Navbar, Footer, RouterLink],
   templateUrl: './matches-page.html',
   styleUrl: './matches-page.css'
 })

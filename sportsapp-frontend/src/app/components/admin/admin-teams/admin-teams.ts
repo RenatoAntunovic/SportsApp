@@ -28,6 +28,8 @@ export class AdminTeams implements OnInit{
   selectedSportId : number|null = null;
   selectedLeagueId : number|null = null;
   form : Team = {name:'', country: '' ,logoUrl: ''};
+  filterSportId : number | null=null;
+  filterLeagueId : number | null = null;
 
   /**
    *
@@ -149,6 +151,27 @@ get filteredLeagues(): League[]{
   if(!this.selectedSportId)
     return this.leagues;
   return this.leagues.filter(x => x.sport?.id === this.selectedSportId);
+}
+
+get filteredTeams(): Team[] {
+  let result = this.teams;
+  
+  if (this.filterSportId) {
+    result = result.filter(t => t.sport?.id === this.filterSportId);
+  }
+  if (this.filterLeagueId) {
+    result = result.filter(t => t.league?.id === this.filterLeagueId);
+  }
+  return result;
+}
+
+get filterLeagues(): League[] {
+  if (!this.filterSportId) return this.leagues;
+  return this.leagues.filter(l => l.sport?.id === this.filterSportId);
+}
+
+onFilterSportChange() {
+  this.filterLeagueId = null;
 }
 }
 

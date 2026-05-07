@@ -71,7 +71,7 @@
     <!-- MATCHES TAB -->
     <div class="tab-content" *ngIf="activeTab === 'MATCHES'">
       <div class="matches-container" *ngIf="matches.length > 0">
-        <div class="match-item" *ngFor="let match of matches">
+        <div class="match-item" *ngFor="let match of matches" [routerLink]="['/matches', match.id]" style="cursor: pointer;">
           <div class="mi-league">{{ match.league?.name }}</div>
           <div class="mi-teams">
             <div class="mi-team-row">
@@ -97,6 +97,11 @@
   <span class="mi-live" *ngIf="match.status === 'LIVE'">● LIVE</span>
   <span class="mi-time" *ngIf="match.status !== 'LIVE'">{{ match.matchDate | date:'dd.MM HH:mm' }}</span>
   <span class="mi-time mi-postponed" *ngIf="match.status === 'POSTPONED'">Odgođen</span>
+</div>
+<div class="mi-arrow">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M10 17l5-5-5-5v10z"/>
+  </svg>
 </div>
         </div>
       </div>

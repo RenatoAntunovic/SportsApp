@@ -31,6 +31,8 @@ export const routes: Routes = [
   { path: 'players', component: PlayersPage },
   {path: 'teams/:id',component :  TeamDetail},
   {path: 'profile', component: Profile ,canActivate: [authGuard]},
+  { path: 'matches/:id', loadComponent: () => import('./components/pages/match-detail/match-detail').then(m => m.MatchDetail) },
+  
   {
     path: 'admin',
     component: AdminLayout,

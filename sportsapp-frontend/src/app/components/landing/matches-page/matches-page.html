@@ -32,13 +32,19 @@
     </div>
 
     <div class="matches-container">
+      <div class="hint-banner">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+  </svg>
+  Klikni na meč za detaljan pregled, formu i međusobne susrete
+</div>
       <div class="matches-tabs">
         <div class="mtab" [class.active]="activeTab === 'ALL'" (click)="setTab('ALL')">Svi</div>
         <div class="mtab" [class.active]="activeTab === 'LIVE'" (click)="setTab('LIVE')">LIVE</div>
         <div class="mtab" [class.active]="activeTab === 'SCHEDULED'" (click)="setTab('SCHEDULED')">Zakazani</div>
         <div class="mtab" [class.active]="activeTab === 'FINISHED'" (click)="setTab('FINISHED')">Završeni</div>
       </div>
-      <div class="match-item" *ngFor="let match of filteredMatches">
+      <div class="match-item" *ngFor="let match of filteredMatches" [routerLink]="['/matches', match.id]" style="cursor: pointer;">
         <div class="mi-league">{{ match.league?.name }}</div>
         <div class="mi-teams">
           <div class="mi-team-row">
@@ -64,6 +70,11 @@
   <span class="mi-live" *ngIf="match.status === 'LIVE'">● LIVE</span>
   <span class="mi-time" *ngIf="match.status !== 'LIVE'">{{ match.matchDate | date:'dd.MM HH:mm' }}</span>
   <span class="mi-time mi-postponed" *ngIf="match.status === 'POSTPONED'">Odgođen</span>
+</div>
+<div class="mi-arrow">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M10 17l5-5-5-5v10z"/>
+  </svg>
 </div>
       </div>
       <div *ngIf="filteredMatches.length === 0" class="empty-msg">

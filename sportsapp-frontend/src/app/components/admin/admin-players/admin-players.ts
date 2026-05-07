@@ -38,6 +38,9 @@ export class AdminPlayers implements OnInit{
   editId : number|null = null;
   saving = false;
 
+  filterSportId: number |null = null;
+  filterLeagueId: number | null = null;
+  filterTeamId: number |null = null;
   selectedSportId : number | null = null;
   selectedTeamId : number|null = null;
   selectedLeagueId : number |null =null;
@@ -191,5 +194,45 @@ export class AdminPlayers implements OnInit{
     const sport = this.sports.find(s => s.id === this.selectedSportId);
     if (!sport) return [];
     return this.positionsMap[sport.name] || [];
+}
+
+get filteredPlayers(): Player[] {
+  let result = this.players;
+
+  if (this.filterSportId) {
+    result = result.filter(p => p.team?.sport?.id === this.filterSportId);
+  }
+  if (this.filterLeagueId) {
+    result = result.filter(p => p.team?.league?.id === this.filterLeagueId);
+  }
+  if (this.filterTeamId) {
+    result = result.filter(p => p.team?.id === this.filterTeamId);
+  }
+  return result;
+}
+
+get filterLeagues(): League[] {
+  if (!this.filterSportId) return this.leagues;
+  return this.leagues.filter(l => l.sport?.id === this.filterSportId);
+}
+
+get filterTeams(): Team[] {
+  let result = this.teams;
+  if (this.filterSportId) {
+    result = result.filter(t => t.sport?.id === this.filterSportId);
+  }
+  if (this.filterLeagueId) {
+    result = result.filter(t => t.league?.id === this.filterLeagueId);
+  }
+  return result;
+}
+
+onFilterSportChange() {
+  this.filterLeagueId = null;
+  this.filterTeamId = null;
+}
+
+onFilterLeagueChange() {
+  this.filterTeamId = null;
 }
 }

@@ -9,7 +9,29 @@
       Dodaj igrača
     </button>
   </div>
-
+  <div class="filter-bar">
+  <div class="filter-group">
+    <label>Filter po sportu</label>
+    <select class="form-input" [(ngModel)]="filterSportId" (ngModelChange)="onFilterSportChange()">
+      <option [ngValue]="null">Svi sportovi</option>
+      <option *ngFor="let sport of sports" [ngValue]="sport.id">{{ sport.name }}</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <label>Filter po ligi</label>
+    <select class="form-input" [(ngModel)]="filterLeagueId" (ngModelChange)="onFilterLeagueChange()">
+      <option [ngValue]="null">Sve lige</option>
+      <option *ngFor="let league of filterLeagues" [ngValue]="league.id">{{ league.name }}</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <label>Filter po timu</label>
+    <select class="form-input" [(ngModel)]="filterTeamId">
+      <option [ngValue]="null">Svi timovi</option>
+      <option *ngFor="let team of filterTeams" [ngValue]="team.id">{{ team.name }}</option>
+    </select>
+  </div>
+</div>
   <div class="table-container">
     <table class="data-table">
       <thead>
@@ -25,7 +47,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let player of players">
+        <tr *ngFor="let player of filteredPlayers">
           <td class="td-id">{{ player.id }}</td>
           <td>
             <img *ngIf="player.photoUrl" [src]="player.photoUrl" class="sport-icon-img" alt="logo"
@@ -50,8 +72,8 @@
             </div>
           </td>
         </tr>
-        <tr *ngIf="teams.length === 0">
-          <td colspan="6" class="empty-row">Nema igrača. Dodaj prvog igrača!</td>
+        <tr *ngIf="filteredPlayers.length === 0">
+          <td colspan="8" class="empty-row">Nema igrača. Dodaj prvog igrača!</td>
         </tr>
       </tbody>
     </table>

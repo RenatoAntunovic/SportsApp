@@ -24,6 +24,7 @@ export class AdminLeagues implements OnInit {
   saving = false;
   
   selectedSportId: number | null = null;
+  filterSportId: number | null = null;
   
   // Forma — podaci koje korisnik unosi
   form: League = { name: '', country: '', logoUrl: '' };
@@ -117,4 +118,9 @@ export class AdminLeagues implements OnInit {
       });
     }
   }
+
+  get filteredLeagues(): League[] {
+  if (!this.filterSportId) return this.leagues;
+  return this.leagues.filter(l => l.sport?.id === this.filterSportId);
+}
 }

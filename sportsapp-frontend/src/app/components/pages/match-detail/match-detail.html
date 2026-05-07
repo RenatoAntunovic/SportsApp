@@ -1,0 +1,176 @@
+<div class="page">
+  <app-navbar></app-navbar>
+
+  <div class="content" *ngIf="match">
+    <!-- Hero -->
+    <div class="match-hero">
+      <div class="match-league-info">
+        <span *ngIf="match.league?.sport">{{ match.league?.sport?.name }}</span>
+        <span class="separator">•</span>
+        <a [routerLink]="['/leagues', match.league?.id]" class="league-link">{{ match.league?.name }}</a>
+        <span class="separator">•</span>
+        <span>{{ match.matchDate | date:'dd.MM.yyyy HH:mm' }}</span>
+      </div>
+
+      <div class="match-main">
+        <!-- Domaći tim -->
+        <a [routerLink]="['/teams', match.homeTeam?.id]" class="team-side">
+          <img *ngIf="match.homeTeam?.logoUrl" [src]="match.homeTeam?.logoUrl" class="team-logo-xl" alt="logo" (error)="match.homeTeam!.logoUrl = ''"/>
+          <div *ngIf="!match.homeTeam?.logoUrl" class="team-logo-placeholder-xl">{{ getTeamInitials(match.homeTeam?.name) }}</div>
+          <div class="team-name-xl">{{ match.homeTeam?.name }}</div>
+        </a>
+
+        <!-- Score -->
+        <div class="score-area">
+          <div class="status-badge" 
+               [class.live]="match.status === 'LIVE'"
+               [class.finished]="match.status === 'FINISHED'"
+               [class.scheduled]="match.status === 'SCHEDULED'"
+               [class.postponed]="match.status === 'POSTPONED'">
+            <span *ngIf="match.status === 'LIVE'">● UŽIVO</span>
+            <span *ngIf="match.status === 'FINISHED'">Završeno</span>
+            <span *ngIf="match.status === 'SCHEDULED'">Zakazano</span>
+            <span *ngIf="match.status === 'POSTPONED'">Odgođeno</span>
+          </div>
+
+          <div class="score-display" *ngIf="match.status !== 'SCHEDULED'">
+            <span class="score" [class.winner]="match.homeScore > match.awayScore && match.status === 'FINISHED'">{{ match.homeScore }}</span>
+            <span class="score-separator">:</span>
+            <span class="score" [class.winner]="match.awayScore > match.homeScore && match.status === 'FINISHED'">{{ match.awayScore }}</span>
+          </div>
+
+          <div class="vs-display" *ngIf="match.status === 'SCHEDULED'">
+            <span class="vs-text">VS</span>
+            <span class="vs-time">{{ match.matchDate | date:'HH:mm' }}</span>
+          </div>
+        </div>
+
+        <!-- Gostujući tim -->
+        <a [routerLink]="['/teams', match.awayTeam?.id]" class="team-side">
+          <img *ngIf="match.awayTeam?.logoUrl" [src]="match.awayTeam?.logoUrl" class="team-logo-xl" alt="logo" (error)="match.awayTeam!.logoUrl = ''"/>
+          <div *ngIf="!match.awayTeam?.logoUrl" class="team-logo-placeholder-xl">{{ getTeamInitials(match.awayTeam?.name) }}</div>
+          <div class="team-name-xl">{{ match.awayTeam?.name }}</div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Tabovi -->
+    <div class="tabs">
+      <div class="tab" [class.active]="activeTab === 'OVERVIEW'" (click)="setTab('OVERVIEW')">Pregled</div>
+      <div class="tab" [class.active]="activeTab === 'FORM'" (click)="setTab('FORM')">Forma</div>
+      <div class="tab" [class.active]="activeTab === 'SASTAVI'" (click)="setTab('SASTAVI')">Sastavi</div>
+    </div>
+
+    <!-- OVERVIEW TAB -->
+    <div class="tab-content" *ngIf="activeTab === 'OVERVIEW'">
+      <h3 class="section-heading">Međusobni susreti</h3>
+      <div class="h2h-container" *ngIf="headToHead.length > 0">
+        <div class="h2h-item" *ngFor="let m of headToHead" [routerLink]="['/matches', m.id]">
+          <div class="h2h-date">{{ m.matchDate | date:'dd.MM.yyyy' }}</div>
+          <div class="h2h-teams">
+            <div class="h2h-team">
+              <img *ngIf="m.homeTeam?.logoUrl" [src]="m.homeTeam?.logoUrl" class="h2h-logo" alt="logo" (error)="m.homeTeam!.logoUrl = ''"/>
+              <div *ngIf="!m.homeTeam?.logoUrl" class="h2h-logo-placeholder">{{ getTeamInitials(m.homeTeam?.name) }}</div>
+              <span>{{ m.homeTeam?.name }}</span>
+            </div>
+            <div class="h2h-score">
+              <span [class.winner]="m.homeScore > m.awayScore">{{ m.homeScore }}</span>
+              <span class="h2h-separator">:</span>
+              <span [class.winner]="m.awayScore > m.homeScore">{{ m.awayScore }}</span>
+            </div>
+            <div class="h2h-team">
+              <img *ngIf="m.awayTeam?.logoUrl" [src]="m.awayTeam?.logoUrl" class="h2h-logo" alt="logo" (error)="m.awayTeam!.logoUrl = ''"/>
+              <div *ngIf="!m.awayTeam?.logoUrl" class="h2h-logo-placeholder">{{ getTeamInitials(m.awayTeam?.name) }}</div>
+              <span>{{ m.awayTeam?.name }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="empty-msg" *ngIf="headToHead.length === 0">
+        Nema prethodnih međusobnih susreta.
+      </div>
+    </div>
+
+    <!-- FORM TAB -->
+    <div class="tab-content" *ngIf="activeTab === 'FORM'">
+      <div class="form-grid">
+        <!-- Domaći -->
+        <div class="form-card">
+          <h3 class="form-title">{{ match.homeTeam?.name }} - zadnjih 5</h3>
+          <div class="form-badges">
+            <span *ngFor="let r of getTeamForm(match.homeTeam?.id)" 
+                  class="form-badge"
+                  [class.win]="r === 'W'"
+                  [class.draw]="r === 'D'"
+                  [class.loss]="r === 'L'">
+              {{ r }}
+            </span>
+            <span *ngIf="getTeamForm(match.homeTeam?.id).length === 0" class="empty-msg">Nema podataka</span>
+          </div>
+        </div>
+
+        <!-- Gostujući -->
+        <div class="form-card">
+          <h3 class="form-title">{{ match.awayTeam?.name }} - zadnjih 5</h3>
+          <div class="form-badges">
+            <span *ngFor="let r of getTeamForm(match.awayTeam?.id)" 
+                  class="form-badge"
+                  [class.win]="r === 'W'"
+                  [class.draw]="r === 'D'"
+                  [class.loss]="r === 'L'">
+              {{ r }}
+            </span>
+            <span *ngIf="getTeamForm(match.awayTeam?.id).length === 0" class="empty-msg">Nema podataka</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROSTER TAB -->
+    <div class="tab-content" *ngIf="activeTab === 'SASTAVI'">
+      <div class="roster-grid">
+        <!-- Domaći -->
+        <div class="roster-card">
+          <h3 class="roster-title">{{ match.homeTeam?.name }}</h3>
+          <div *ngFor="let pos of getPositionKeys(homeTeamPlayers)" class="position-group">
+            <h4 class="position-name">{{ pos }}</h4>
+            <div class="players-list">
+              <div class="player-item" *ngFor="let p of getPlayersByPosition(homeTeamPlayers)[pos]">
+                <div class="player-avatar">{{ getTeamInitials(p.name) }}</div>
+                <div>
+                  <div class="player-name">{{ p.name }}</div>
+                  <div class="player-meta">{{ p.nationality }} • {{ p.age }} god</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="empty-msg" *ngIf="homeTeamPlayers.length === 0">Nema igrača.</div>
+        </div>
+
+        <!-- Gostujući -->
+        <div class="roster-card">
+          <h3 class="roster-title">{{ match.awayTeam?.name }}</h3>
+          <div *ngFor="let pos of getPositionKeys(awayTeamPlayers)" class="position-group">
+            <h4 class="position-name">{{ pos }}</h4>
+            <div class="players-list">
+              <div class="player-item" *ngFor="let p of getPlayersByPosition(awayTeamPlayers)[pos]">
+                <div class="player-avatar">{{ getTeamInitials(p.name) }}</div>
+                <div>
+                  <div class="player-name">{{ p.name }}</div>
+                  <div class="player-meta">{{ p.nationality }} • {{ p.age }} god</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="empty-msg" *ngIf="awayTeamPlayers.length === 0">Nema igrača.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content" *ngIf="!match">
+    <div class="empty-msg">Učitavanje...</div>
+  </div>
+
+  <app-footer></app-footer>
+</div>

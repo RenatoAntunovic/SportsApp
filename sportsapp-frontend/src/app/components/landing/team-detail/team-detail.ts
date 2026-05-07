@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Navbar } from '../../shared/navbar/navbar';
 import { Footer } from '../../shared/footer/footer';
 import { TeamService } from '../../../services/team.service';
@@ -13,7 +13,7 @@ import { Match } from '../../../models/match.model';
 @Component({
   selector: 'app-team-detail',
   standalone: true,
-  imports: [CommonModule, Navbar, Footer],
+  imports: [CommonModule, Navbar, Footer,RouterLink],
   templateUrl: './team-detail.html',
   styleUrl: './team-detail.css'
 })

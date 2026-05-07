@@ -9,7 +9,32 @@
       Dodaj meč
     </button>
   </div>
-
+  <div class="filter-bar">
+  <div class="filter-group">
+    <label>Filter po sportu</label>
+    <select class="form-input" [(ngModel)]="filterSportId" (ngModelChange)="onFilterSportChange()">
+      <option [ngValue]="null">Svi sportovi</option>
+      <option *ngFor="let sport of sports" [ngValue]="sport.id">{{ sport.name }}</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <label>Filter po ligi</label>
+    <select class="form-input" [(ngModel)]="filterLeagueId">
+      <option [ngValue]="null">Sve lige</option>
+      <option *ngFor="let league of filterLeagues" [ngValue]="league.id">{{ league.name }}</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <label>Filter po statusu</label>
+    <select class="form-input" [(ngModel)]="filterStatus">
+      <option value="ALL">Svi statusi</option>
+      <option value="SCHEDULED">Zakazani</option>
+      <option value="LIVE">Uživo</option>
+      <option value="FINISHED">Završeni</option>
+      <option value="POSTPONED">Odgođeni</option>
+    </select>
+  </div>
+</div>
   <div class="table-container">
     <table class="data-table">
       <thead>
@@ -25,7 +50,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let match of matches">
+        <tr *ngFor="let match of filteredMatches">
           <td class="td-id">{{ match.id }}</td>
           <td>{{ match.league?.name || '—' }}</td>
           <td class="td-name">{{ match.homeTeam?.name || '—' }}</td>
@@ -46,7 +71,7 @@
             </div>
           </td>
         </tr>
-        <tr *ngIf="matches.length === 0">
+        <tr *ngIf="filteredMatches.length === 0">
           <td colspan="8" class="empty-row">Nema mečeva. Dodaj prvi meč!</td>
         </tr>
       </tbody>

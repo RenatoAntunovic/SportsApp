@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="hero-right">
-      <div class="live-card" *ngFor="let match of featuredMatches">
+      <div class="live-card" *ngFor="let match of featuredMatches"[routerLink]="['/matches', match.id]" style="cursor: pointer;">
         <div class="live-card-header">
           <span class="league-name">{{ match.league?.name }}</span>
           <span class="live-badge" *ngIf="match.status === 'LIVE'">● LIVE</span>
@@ -141,7 +141,7 @@
         <div class="mtab" [class.active]="activeTab === 'SCHEDULED'" (click)="setTab('SCHEDULED')">Zakazani</div>
         <div class="mtab" [class.active]="activeTab === 'FINISHED'" (click)="setTab('FINISHED')">Završeni</div>
       </div>
-      <div class="match-item" *ngFor="let match of filteredMatches">
+      <div class="match-item" *ngFor="let match of filteredMatches" [routerLink]="['/matches', match.id]" style="cursor: pointer;">
         <div class="mi-league">{{ match.league?.name }}</div>
         <div class="mi-teams">
           <div class="mi-team-row">
@@ -169,12 +169,25 @@
           <span class="mi-time" *ngIf="match.status === 'SCHEDULED'">{{ match.matchDate | date:'HH:mm' }}</span>
           <span class="mi-time" *ngIf="match.status === 'POSTPONED'" style="color:#ffaa2c;">Odgođen</span>
         </div>
+        <div class="mi-arrow">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M10 17l5-5-5-5v10z"/>
+  </svg>
+</div>
       </div>
       <div *ngIf="filteredMatches.length === 0" style="padding: 40px; text-align: center; color: #3d4f63;">
         Nema mečeva za ovaj filter.
       </div>
     </div>
+       <div class="see-all-row">
+      <a routerLink="/matches" class="see-all-btn">
+        Pogledaj sve mečeve
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M10 17l5-5-5-5v10z"/>
+        </svg>
+      </a>
+      </div>
+  </div>  <!-- ovo zatvara matches-section -->
   </div>
 
   <app-footer></app-footer>
-</div>

@@ -9,7 +9,22 @@
       Dodaj tim
     </button>
   </div>
-
+  <div class="filter-bar">
+  <div class="filter-group">
+    <label>Filter po sportu</label>
+    <select class="form-input" [(ngModel)]="filterSportId" (ngModelChange)="onFilterSportChange()">
+      <option [ngValue]="null">Svi sportovi</option>
+      <option *ngFor="let sport of sports" [ngValue]="sport.id">{{ sport.name }}</option>
+    </select>
+  </div>
+  <div class="filter-group">
+    <label>Filter po ligi</label>
+    <select class="form-input" [(ngModel)]="filterLeagueId">
+      <option [ngValue]="null">Sve lige</option>
+      <option *ngFor="let league of filterLeagues" [ngValue]="league.id">{{ league.name }}</option>
+    </select>
+  </div>
+</div>
   <div class="table-container">
     <table class="data-table">
       <thead>
@@ -24,7 +39,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let team of teams">
+        <tr *ngFor="let team of filteredTeams">
           <td class="td-id">{{ team.id }}</td>
           <td>
             <img *ngIf="team.logoUrl" [src]="team.logoUrl" class="sport-icon-img" alt="logo"
@@ -48,7 +63,7 @@
             </div>
           </td>
         </tr>
-        <tr *ngIf="teams.length === 0">
+        <tr *ngIf="filteredTeams.length === 0">
           <td colspan="6" class="empty-row">Nema timova. Dodaj prvi tim!</td>
         </tr>
       </tbody>

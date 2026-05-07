@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Navbar } from '../../shared/navbar/navbar';
 import { Footer } from '../../shared/footer/footer';
 import { LeagueService } from '../../../services/league.service';
@@ -13,7 +13,7 @@ import { Standing } from '../../../models/standing.model';
 @Component({
   selector: 'app-league-detail',
   standalone: true,
-  imports: [CommonModule, Navbar, Footer],
+  imports: [CommonModule, Navbar, Footer,RouterLink],
   templateUrl: './league-detail.html',
   styleUrl: './league-detail.css'
 })

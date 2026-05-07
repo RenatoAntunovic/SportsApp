@@ -312,3 +312,30 @@
 .legend-dot.bottom {
   background: rgba(255, 68, 68, 0.5);
 }
+
+.match-item {
+  position: relative;
+  transition: all 200ms;
+}
+
+.match-item:hover {
+  background: rgba(0, 212, 170, 0.04);
+  border-color: rgba(0, 212, 170, 0.3) !important;
+  transform: translateX(3px);
+}
+
+.mi-arrow {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #3d4f63;
+  opacity: 0;
+  transition: all 200ms;
+}
+
+.match-item:hover .mi-arrow {
+  opacity: 1;
+  color: #00d4aa;
+  transform: translateY(-50%) translateX(4px);
+}

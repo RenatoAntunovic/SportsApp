@@ -754,3 +754,57 @@ app-footer {
   gap: 12px;
   justify-content: center;
 }
+
+.see-all-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.see-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  background: rgba(0, 212, 170, 0.1);
+  border: 1px solid rgba(0, 212, 170, 0.3);
+  border-radius: 10px;
+  color: #00d4aa;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 180ms;
+}
+
+.see-all-btn:hover {
+  background: rgba(0, 212, 170, 0.2);
+  border-color: rgba(0, 212, 170, 0.5);
+  transform: translateX(2px);
+}
+
+.match-item {
+  position: relative;
+  transition: all 200ms;
+}
+
+.match-item:hover {
+  background: rgba(0, 212, 170, 0.04);
+  border-color: rgba(0, 212, 170, 0.3) !important;
+  transform: translateX(3px);
+}
+
+.mi-arrow {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #3d4f63;
+  opacity: 0;
+  transition: all 200ms;
+}
+
+.match-item:hover .mi-arrow {
+  opacity: 1;
+  color: #00d4aa;
+  transform: translateY(-50%) translateX(4px);
+}

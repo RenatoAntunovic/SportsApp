@@ -234,3 +234,44 @@
 .clear-date-btn:hover {
   background: rgba(255, 68, 68, 0.2);
 }
+
+.hint-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  background: rgba(0, 212, 170, 0.06);
+  border: 1px solid rgba(0, 212, 170, 0.15);
+  border-radius: 10px;
+  font-size: 13px;
+  color: #00d4aa;
+  margin-bottom: 16px;
+}
+
+.match-item {
+  position: relative;
+  cursor: pointer;
+  transition: all 200ms;
+}
+
+.match-item:hover {
+  background: rgba(0, 212, 170, 0.04);
+  border-color: rgba(0, 212, 170, 0.3) !important;
+  transform: translateX(3px);
+}
+
+.mi-arrow {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #3d4f63;
+  opacity: 0;
+  transition: all 200ms;
+}
+
+.match-item:hover .mi-arrow {
+  opacity: 1;
+  color: #00d4aa;
+  transform: translateY(-50%) translateX(4px);
+}

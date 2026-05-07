@@ -117,10 +117,29 @@ export class LandingComponent implements OnInit {
   }
 
   
-  get filteredMatches(): Match[] {
-    if (this.activeTab === 'ALL') return this.matches;
-    return this.matches.filter(m => m.status === this.activeTab);
+ get filteredMatches(): Match[] {
+  let result = this.matches;
+  
+  if (this.activeTab !== 'ALL') {
+    result = result.filter(m => m.status === this.activeTab);
   }
+  result = [...result].sort((a, b) => { 
+    if (a.status === 'LIVE' && b.status !== 'LIVE') return -1;
+    if (b.status === 'LIVE' && a.status !== 'LIVE') return 1;
+    
+
+    if (a.status === 'FINISHED' && b.status === 'SCHEDULED') return -1;
+    if (a.status === 'SCHEDULED' && b.status === 'FINISHED') return 1;
+    
+    if (a.status === 'FINISHED') {
+      return new Date(b.matchDate).getTime() - new Date(a.matchDate).getTime();
+    }
+    return new Date(a.matchDate).getTime() - new Date(b.matchDate).getTime();
+  });
+  
+
+  return result.slice(0, 10);
+}
 
   setTab(tab: 'ALL' | 'LIVE' | 'SCHEDULED' | 'FINISHED') {
     this.activeTab = tab;

@@ -29,6 +29,9 @@ export class AdminMatches implements OnInit {
   editId : number | null = null;
   saving = false;
 
+  filterSportId: number | null = null;
+  filterLeagueId: number | null = null;
+  filterStatus: string = 'ALL';
   selectedSportId : number | null = null;
   selectedHomeTeamId : number | null = null;
   selectedAwayTeamId  : number | null = null;
@@ -260,5 +263,29 @@ get filteredAwayTeams(): Team[] {
   return this.teams.filter(t => 
     t.league?.id === this.selectedLeagueId && t.id !== this.selectedHomeTeamId
   );
+}
+
+get filteredMatches(): Match[] {
+  let result = this.matches;
+
+  if (this.filterSportId) {
+    result = result.filter(m => m.league?.sport?.id === this.filterSportId);
+  }
+  if (this.filterLeagueId) {
+    result = result.filter(m => m.league?.id === this.filterLeagueId);
+  }
+  if (this.filterStatus !== 'ALL') {
+    result = result.filter(m => m.status === this.filterStatus);
+  }
+  return result;
+}
+
+get filterLeagues(): League[] {
+  if (!this.filterSportId) return this.leagues;
+  return this.leagues.filter(l => l.sport?.id === this.filterSportId);
+}
+
+onFilterSportChange() {
+  this.filterLeagueId = null;
 }
 }

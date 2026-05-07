@@ -259,3 +259,29 @@
 }
 
 .btn-save:hover { background: #00b894; }
+
+.filter-bar {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 16px 20px;
+  background: #0d1f35;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+}
+
+.filter-bar .filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  max-width: 280px;
+}
+
+.filter-bar .filter-group label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #8a99b0;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
