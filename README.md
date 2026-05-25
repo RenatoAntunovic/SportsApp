@@ -12,12 +12,11 @@
 - [Screenshots](#screenshots)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
 - [Setup](#setup)
 - [Database](#database)
 - [API Documentation](#api-documentation)
-- [Key Implementation Highlights](#key-implementation-highlights)
 - [Future Improvements](#future-improvements)
+- [License](#license)
 
 ---
 
@@ -34,11 +33,12 @@ The application features role-based access control with JWT authentication, allo
 ![Login](docs/screenshots/01-login.png)
 *Login page — sign in, register, or continue as guest*
 
-![Landing](docs/screenshots/02-landing.png)(docs/screenshots/landing2.png)
-*Landing page — featured matches and personalized favorites section*
+![Landing](docs/screenshots/02-landing.png)
+![Landing 2](docs/screenshots/landing2.png)
+*Landing page — featured matches and personalized favorites section when user logged in*
 
 ![Leagues](docs/screenshots/03-leagues.png)
-*Leagues — filter by sport, toggle favorites only*
+*Leagues — filter by sport, toggle favorites only if logged in*
 
 ![Matches](docs/screenshots/04-matches.png)
 *Matches — filter by sport, league, status and date*
@@ -50,6 +50,7 @@ The application features role-based access control with JWT authentication, allo
 *NBA standings — different columns (PCT, PF, PA) because basketball scores differently*
 
 ![Team Detail](docs/screenshots/07-team-detail.png)
+![Team Detail 2](docs/screenshots/07-teamdetail2.png)
 *Team detail — full roster grouped by position and recent form*
 
 ![Match Detail](docs/screenshots/08-match-detail.png)
@@ -65,6 +66,7 @@ The application features role-based access control with JWT authentication, allo
 *User profile — edit info, manage favorites, change password*
 
 ![Admin](docs/screenshots/12-admin.png)
+![Admin 2](docs/screenshots/12-adminEdit.png)
 *Admin panel — full CRUD with cascading filters*
 
 
@@ -125,6 +127,31 @@ The application features role-based access control with JWT authentication, allo
 
 ---
 
+## 📚 API Documentation
+
+After starting the backend, Swagger UI is available at:
+
+**http://localhost:8080/swagger-ui.html**
+
+### Main Endpoints
+
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| POST | `/api/auth/register` | Public | Register new user |
+| POST | `/api/auth/login` | Public | Login and get JWT |
+| GET | `/api/sports` | Public | List all sports |
+| GET | `/api/leagues` | Public | List all leagues |
+| GET | `/api/teams` | Public | List all teams |
+| GET | `/api/matches` | Public | List all matches |
+| POST | `/api/matches` | ADMIN | Create match (auto-regenerates standings) |
+| GET | `/api/standings/league/{id}` | Public | Get standings for league |
+| GET | `/api/favorites/teams` | USER | Get user's favorite teams |
+| POST | `/api/favorites/teams/{id}` | USER | Toggle favorite team |
+| PUT | `/api/users/me` | USER | Update own profile |
+
+
+---
+
 ## Getting Started
 
 **Requirements:** Java 21+, Node.js 18+, PostgreSQL 18+, Maven 3.8+
@@ -159,3 +186,18 @@ Frontend starts at `http://localhost:4200`.
 |------|-------|----------|
 | Admin | renato@gmail.com | lozinka123 |
 | User | register a new account | — |
+
+---
+
+## 🔮 Future Improvements
+
+Features planned for upcoming iterations:
+
+- [ ] **WebSocket integration** for real-time match score updates
+- [ ] **Player detail page** with statistics and career data
+- [ ] **Advanced statistics** — top scorers, league leaders, season stats
+- [ ] **Mobile app** with Flutter sharing the same backend
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details..
