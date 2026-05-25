@@ -2,21 +2,7 @@
 
 > Full-stack sports tracking application for leagues, teams, players, and live matches — inspired by Flashscore.
 
-![Java](https://img.shields.io/badge/Java-21-orange) ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0-green) ![Angular](https://img.shields.io/badge/Angular-19-red) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-blue) ![JWT](https://img.shields.io/badge/JWT-Auth-yellow)
-
----
-
-## 📋 Table of Contents
-
-- [About](#about)
-- [Screenshots](#screenshots)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Setup](#setup)
-- [Database](#database)
-- [API Documentation](#api-documentation)
-- [Future Improvements](#future-improvements)
-- [License](#license)
+![Java](https://img.shields.io/badge/Java-21-orange) ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0-green) ![Angular](https://img.shields.io/badge/Angular-21-red) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-blue) ![JWT](https://img.shields.io/badge/JWT-Auth-yellow)
 
 ---
 
@@ -143,7 +129,7 @@ After starting the backend, Swagger UI is available at:
 | GET | `/api/leagues` | Public | List all leagues |
 | GET | `/api/teams` | Public | List all teams |
 | GET | `/api/matches` | Public | List all matches |
-| POST | `/api/matches` | ADMIN | Create match (auto-regenerates standings) |
+| POST | `/api/matches` | ADMIN | Create match (auto-regenerates standings if match is finished) |
 | GET | `/api/standings/league/{id}` | Public | Get standings for league |
 | GET | `/api/favorites/teams` | USER | Get user's favorite teams |
 | POST | `/api/favorites/teams/{id}` | USER | Toggle favorite team |
