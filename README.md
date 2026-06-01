@@ -6,7 +6,7 @@
 
 ## 🌐 Live Demo
 
-**[sports-app-beryl.vercel.app](https://sports-app-beryl.vercel.app)**
+<a href="https://sports-app-beryl.vercel.app" target="_blank">sports-app-beryl.vercel.app</a>
 
 | Role | Email | Password |
 |------|-------|----------|
