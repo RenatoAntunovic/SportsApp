@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Standing } from '../models/standing.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class StandingService {
-  private apiUrl = 'http://localhost:8080/api/standings';
+ private apiUrl = `${environment.apiUrl}/standings`;
 
   constructor(private http: HttpClient) {}
 

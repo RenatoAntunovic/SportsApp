@@ -3,12 +3,13 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Team } from '../models/team.model';
 import { League } from '../models/league.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FavoriteService {
-  private apiUrl = 'http://localhost:8080/api/favorites';
+  private apiUrl = `${environment.apiUrl}/favorites`;
 
   constructor(private http: HttpClient) {}
 
