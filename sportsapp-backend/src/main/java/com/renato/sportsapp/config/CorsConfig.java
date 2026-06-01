@@ -13,6 +13,7 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOrigin("http://localhost:4200");
+        config.addAllowedOrigin("https://sports-app-beryl.vercel.app");
         config.addAllowedMethod("*");
         config.addAllowedHeader("*");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
