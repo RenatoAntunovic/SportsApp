@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict wd71i3SLanKTnx9h9n1HKatrtMlzXW08aqgaQvIt5hRYGpcB1N3kh9bLsfs52An
+
 
 -- Dumped from database version 18.3
 -- Dumped by pg_dump version 18.3
@@ -1052,5 +1052,5 @@ ALTER TABLE ONLY public.user_favorite_leagues
 -- PostgreSQL database dump complete
 --
 
-\unrestrict wd71i3SLanKTnx9h9n1HKatrtMlzXW08aqgaQvIt5hRYGpcB1N3kh9bLsfs52An
+
 
