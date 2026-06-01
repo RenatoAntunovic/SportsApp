@@ -4,6 +4,15 @@
 
 ![Java](https://img.shields.io/badge/Java-21-orange) ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-4.0-green) ![Angular](https://img.shields.io/badge/Angular-21-red) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-18-blue) ![JWT](https://img.shields.io/badge/JWT-Auth-yellow)
 
+## 🌐 Live Demo
+
+**[sports-app-beryl.vercel.app](https://sports-app-beryl.vercel.app)**
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | admin@gmail.com | admin123 |
+| User | register a new account | — |
+
 ---
 
 ## 📖 About
@@ -170,7 +179,7 @@ Frontend starts at `http://localhost:4200`.
 
 | Role | Email | Password |
 |------|-------|----------|
-| Admin | renato@gmail.com | lozinka123 |
+| Admin | admin@gmail.com | admin123 |
 | User | register a new account | — |
 
 ---
