@@ -76,6 +76,7 @@ The application features role-based access control with JWT authentication, allo
 - **Date filtering** on matches with calendar picker
 - **Global search** with live autocomplete grouped by entity type
 - **Sport-specific position grouping** (e.g., Goalkeeper → Defense → Midfield → Attack for football)
+- **Pagination support** on teams and players endpoints (Load more)
 
 ### User Features (Authenticated)
 - **JWT-based authentication** with email and password
