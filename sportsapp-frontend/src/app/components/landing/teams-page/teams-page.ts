@@ -26,6 +26,11 @@ export class TeamsPage implements OnInit {
   sports: Sport[] = [];
   leagues: League[] = [];
   
+  currentPage = 0;
+  pageSize = 20;
+  totalPages = 0;
+  loadingMore = false;
+
   favoriteTeamsId : Set<number> = new Set();
 
   selectedSportId: number | null = null;
@@ -61,6 +66,10 @@ export class TeamsPage implements OnInit {
     })
   }
 
+  get hasMore(): boolean {
+  return this.currentPage < this.totalPages - 1;
+}
+
   isFavorite(teamId:number):boolean{
     return this.favoriteTeamsId.has(teamId);
   }
@@ -93,13 +102,23 @@ export class TeamsPage implements OnInit {
 }
 
   loadTeams() {
-    this.teamService.getAll().subscribe({
-      next: (data) => {
-        this.teams = [...data];
-        this.cdr.detectChanges();
-      }
-    });
+  this.teamService.getAllPaged(this.currentPage, this.pageSize).subscribe({
+    next: (data) => {
+      this.teams = [...this.teams, ...data.content];
+      this.totalPages = data.totalPages;
+      this.loadingMore = false;
+      this.cdr.detectChanges();
+    }
+  });
+}
+
+loadMore() {
+  if (this.currentPage < this.totalPages - 1) {
+    this.currentPage++;
+    this.loadingMore = true;
+    this.loadTeams();
   }
+}
 
   loadSports() {
     this.sportService.getAll().subscribe({

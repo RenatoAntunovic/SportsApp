@@ -3,6 +3,9 @@ package com.renato.sportsapp.service;
 import com.renato.sportsapp.entity.Player;
 import com.renato.sportsapp.repository.PlayerRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,5 +46,10 @@ public class PlayerService {
 
     public void delete(Long id) {
         playerRepository.deleteById(id);
+    }
+
+    public Page<Player> getAllPaged(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return playerRepository.findAll(pageable);
     }
 }

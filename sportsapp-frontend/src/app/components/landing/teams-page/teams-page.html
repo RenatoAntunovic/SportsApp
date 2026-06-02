@@ -58,6 +58,11 @@
         Nema timova za ovaj filter.
       </div>
     </div>
+    <div class="load-more-container" *ngIf="hasMore">
+  <button class="load-more-btn" (click)="loadMore()" [disabled]="loadingMore">
+    {{ loadingMore ? 'Učitavanje...' : 'Učitaj još timova' }}
+  </button>
+</div>
   </div>
 
   <app-footer></app-footer>

@@ -40,4 +40,8 @@ export class TeamService {
   getBySport(sportId:number) :Observable<Team[]>{
     return this.http.get<Team[]>(`${this.apiUrl}/sport/${sportId}`);
   }
+
+  getAllPaged(page: number, size: number): Observable<any> {
+  return this.http.get<any>(`${environment.apiUrl}/teams/paged?page=${page}&size=${size}`);
+}
 }

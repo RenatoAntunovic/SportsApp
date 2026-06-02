@@ -34,4 +34,7 @@ export class PlayerService {
   return this.http.get<Player[]>(`${this.apiUrl}/team/${teamId}`);
   }
 
+  getAllPaged(page: number, size: number): Observable<any> {
+  return this.http.get<any>(`${environment.apiUrl}/players/paged?page=${page}&size=${size}`);
+}
 }

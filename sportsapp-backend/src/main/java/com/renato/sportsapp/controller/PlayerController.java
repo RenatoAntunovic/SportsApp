@@ -3,6 +3,7 @@ package com.renato.sportsapp.controller;
 import com.renato.sportsapp.entity.Player;
 import com.renato.sportsapp.service.PlayerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,5 +45,12 @@ public class PlayerController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         playerService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/paged")
+    public ResponseEntity<Page<Player>> getAllPaged(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+        return ResponseEntity.ok(playerService.getAllPaged(page, size));
     }
 }

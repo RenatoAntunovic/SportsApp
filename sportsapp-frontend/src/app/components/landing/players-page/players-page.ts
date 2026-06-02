@@ -25,6 +25,11 @@ export class PlayersPage implements OnInit {
   sports: Sport[] = [];
   leagues: League[] = [];
 
+  currentPage = 0;
+  pageSize = 20;
+  totalPages = 0;
+  loadingMore = false;
+
   selectedSportId: number | null = null;
   selectedLeagueId: number | null = null;
   selectedTeamId: number | null = null;
@@ -45,13 +50,27 @@ export class PlayersPage implements OnInit {
   }
 
   loadPlayers() {
-    this.playerService.getAll().subscribe({
-      next: (data) => {
-        this.players = [...data];
-        this.cdr.detectChanges();
-      }
-    });
+  this.playerService.getAllPaged(this.currentPage, this.pageSize).subscribe({
+    next: (data) => {
+      this.players = [...this.players, ...data.content];
+      this.totalPages = data.totalPages;
+      this.loadingMore = false;
+      this.cdr.detectChanges();
+    }
+  });
+}
+
+loadMore() {
+  if (this.currentPage < this.totalPages - 1) {
+    this.currentPage++;
+    this.loadingMore = true;
+    this.loadPlayers();
   }
+}
+
+  get hasMore(): boolean {
+  return this.currentPage < this.totalPages - 1;
+}
 
   loadTeams() {
     this.teamService.getAll().subscribe({
