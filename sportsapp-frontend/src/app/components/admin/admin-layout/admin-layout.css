@@ -125,3 +125,54 @@
   padding: 32px;
   background: #0a1628;
 }
+
+
+@media (max-width: 768px) {
+  .admin-page {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 8px;
+    gap: 4px;
+  }
+
+  .nav-item {
+    flex: 1;
+    min-width: 80px;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 6px;
+    font-size: 11px;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .sidebar-footer {
+    flex-direction: row;
+    padding: 8px;
+    gap: 4px;
+  }
+
+  .logout-btn {
+    flex: 1;
+    justify-content: center;
+    font-size: 12px;
+    padding: 8px 6px;
+  }
+
+  .admin-content {
+    padding: 16px;
+  }
+}

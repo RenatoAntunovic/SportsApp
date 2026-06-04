@@ -268,3 +268,38 @@
   color: #00d4aa;
   font-weight: 600;
 }
+
+@media (max-width: 768px) {
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .btn-add {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .table-container {
+    overflow-x: auto;
+  }
+
+  .data-table {
+    min-width: 600px;
+  }
+
+  .modal {
+    max-width: 95vw;
+    margin: 16px;
+  }
+
+  .filter-bar {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .filter-bar .filter-group {
+    max-width: 100%;
+  }
+}

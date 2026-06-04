@@ -52,3 +52,18 @@
 .footer-link:hover {
   color: #e0e8f0;
 }
+
+@media (max-width: 768px) {
+  .footer {
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px 16px;
+    text-align: center;
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .footer-links {
+    justify-content: center;
+  }
+}

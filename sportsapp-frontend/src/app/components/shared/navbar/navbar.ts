@@ -22,6 +22,8 @@ export class Navbar implements OnInit {
   userEmail = '';
   isAdmin = false;
 
+  menuOpen = false;
+
   // Search
   searchQuery = '';
   showResults = false;
@@ -68,6 +70,10 @@ export class Navbar implements OnInit {
     this.playerService.getAll().subscribe({
       next: (data) => this.allPlayers = data
     });
+  }
+
+  toggleMenu(){
+    this.menuOpen = !this.menuOpen;
   }
 
   onSearchFocus() {

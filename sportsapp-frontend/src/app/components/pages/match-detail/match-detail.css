@@ -438,11 +438,86 @@
 }
 
 @media (max-width: 768px) {
-  .match-main {
-    grid-template-columns: 1fr;
-    gap: 16px;
+  .content {
+    padding: 16px;
+    max-width: 100%;
   }
-  .form-grid, .roster-grid {
+
+  .match-hero {
+    padding: 20px 16px;
+  }
+
+  .match-main {
+    grid-template-columns: 1fr auto 1fr;
+    gap: 8px;
+  }
+
+  .team-logo-xl,
+  .team-logo-placeholder-xl {
+    width: 60px;
+    height: 60px;
+    font-size: 18px;
+  }
+
+  .team-name-xl {
+    font-size: 13px;
+  }
+
+  .score-display {
+    font-size: 36px;
+    gap: 10px;
+  }
+
+  .vs-text {
+    font-size: 22px;
+  }
+
+  .tab {
+    padding: 10px 8px;
+    font-size: 12px;
+  }
+
+  .tab-content {
+    padding: 16px;
+  }
+
+  .h2h-item {
+    grid-template-columns: 70px 1fr;
+    gap: 8px;
+    padding: 10px 12px;
+  }
+
+  .h2h-teams {
+    gap: 8px;
+  }
+
+  .h2h-team {
+    font-size: 12px;
+  }
+
+  .h2h-logo,
+  .h2h-logo-placeholder {
+    width: 20px;
+    height: 20px;
+    font-size: 9px;
+  }
+
+  .h2h-score {
+    font-size: 13px;
+  }
+
+  .form-grid,
+  .roster-grid {
     grid-template-columns: 1fr;
+  }
+
+  .player-avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 11px;
+  }
+
+  .player-name {
+    font-size: 12px;
   }
 }

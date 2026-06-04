@@ -414,3 +414,85 @@
   color: #00d4aa;
   transform: translateY(-50%) translateX(4px);
 }
+
+
+@media (max-width: 768px) {
+  .content {
+    padding: 16px;
+    max-width: 100%;
+  }
+
+  .team-hero {
+    padding: 20px 16px;
+    gap: 16px;
+  }
+
+  .team-logo-lg,
+  .team-logo-placeholder-lg {
+    width: 72px !important;
+    height: 72px !important;
+    max-width: 72px !important;
+    max-height: 72px !important;
+    font-size: 24px;
+  }
+
+  .team-hero-info h1 {
+    font-size: 22px;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .stat-num {
+    font-size: 22px;
+  }
+
+  .players-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .player-card {
+    padding: 14px 10px;
+  }
+
+  .player-photo,
+  .player-photo-placeholder {
+    width: 48px !important;
+    height: 48px !important;
+    max-width: 48px !important;
+    max-height: 48px !important;
+    font-size: 14px;
+  }
+
+  .mi-league {
+    display: none;
+  }
+
+  .match-item {
+    padding: 12px;
+  }
+
+  .mi-scores {
+    margin-right: 10px;
+  }
+
+  .mi-status {
+    width: 50px;
+  }
+
+  .form-match {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .fm-league {
+    width: auto;
+  }
+
+  .fm-date {
+    width: 100%;
+  }
+}

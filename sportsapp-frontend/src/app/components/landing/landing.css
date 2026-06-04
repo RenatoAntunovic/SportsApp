@@ -808,3 +808,100 @@ app-footer {
   color: #00d4aa;
   transform: translateY(-50%) translateX(4px);
 }
+
+@media (max-width: 768px) {
+
+ .nav {
+  max-width: 100% !important;
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
+  .hero {
+    flex-direction: column;
+    padding: 32px 20px 24px;
+    gap: 24px;
+  }
+
+  .hero-left {
+    max-width: 100%;
+  }
+
+  .hero-right {
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+  .hero-btns {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .hbtn-primary,
+  .hbtn-outline {
+    width: 100%;
+    text-align: center;
+  }
+
+  .hero-stats {
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .section {
+    padding: 24px 16px;
+  }
+
+  .matches-section {
+    padding: 0 16px 24px;
+  }
+
+  .favorites-section {
+    padding: 20px 16px !important;
+  }
+
+  .mi-league {
+    display: none;
+  }
+
+  .mi-status {
+    width: 50px;
+  }
+
+  .match-item {
+    padding: 12px 12px;
+  }
+
+  .favorite-leagues-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .favorite-teams-grid {
+    gap: 8px;
+  }
+
+  .empty-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer {
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px 16px;
+    text-align: center;
+  }
+
+  .footer-links {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .nav,
+  .hero,
+  .section,
+  .matches-section,
+  .footer {
+    max-width: 100%;
+  }
+}

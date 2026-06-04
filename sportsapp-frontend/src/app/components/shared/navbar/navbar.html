@@ -8,36 +8,43 @@
     <span class="nav-name">SportsApp</span>
   </div>
 
-  <div class="nav-links">
-    <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Početna</a>
-    <a class="nav-link" routerLink="/matches" routerLinkActive="active">Rezultati</a>
-    <a class="nav-link" routerLink="/leagues" routerLinkActive="active">Lige</a>
-    <a class="nav-link" routerLink="/teams" routerLinkActive="active">Timovi</a>
-    <a class="nav-link" routerLink="/players" routerLinkActive="active">Igrači</a>
-  </div>
+  
+  <button class="hamburger" [class.open]="menuOpen" (click)="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
 
-  <!-- pretraga -->
-  <div class="search-wrapper">
+<div class="nav-links" [class.open]="menuOpen">
+  <div class="nav-links-inner">
+    <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="menuOpen = false">Početna</a>
+    <a class="nav-link" routerLink="/matches" routerLinkActive="active" (click)="menuOpen = false">Rezultati</a>
+    <a class="nav-link" routerLink="/leagues" routerLinkActive="active" (click)="menuOpen = false">Lige</a>
+    <a class="nav-link" routerLink="/teams" routerLinkActive="active" (click)="menuOpen = false">Timovi</a>
+    <a class="nav-link" routerLink="/players" routerLinkActive="active" (click)="menuOpen = false">Igrači</a>
+  </div>
+</div>
+
+  <div class="search-wrapper" [class.open]="menuOpen">
+  <div class="search-wrapper-inner">
     <div class="search-input-box">
       <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
         <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
       </svg>
-      <input class="search-input" 
-             type="text" 
-             placeholder="Pretraži..." 
+      <input class="search-input"
+             type="text"
+             placeholder="Pretraži..."
              [(ngModel)]="searchQuery"
              (focus)="onSearchFocus()"
              (input)="onSearchInput()"
              (blur)="onSearchBlur()" />
     </div>
-
     <div class="search-results" *ngIf="showResults && searchQuery.length > 0">
-      <!-- Timovi -->
       <div class="result-group" *ngIf="filteredTeams.length > 0">
         <div class="result-group-title">Timovi</div>
-        <a class="result-item" *ngFor="let team of filteredTeams" 
-           [routerLink]="['/teams', team.id]" 
-           (click)="selectResult()">
+        <a class="result-item" *ngFor="let team of filteredTeams"
+           [routerLink]="['/teams', team.id]"
+           (click)="selectResult(); menuOpen = false">
           <img *ngIf="team.logoUrl" [src]="team.logoUrl" class="result-logo" alt="logo" (error)="team.logoUrl = ''"/>
           <div *ngIf="!team.logoUrl" class="result-placeholder">{{ getTeamInitials(team.name) }}</div>
           <div class="result-info">
@@ -46,13 +53,11 @@
           </div>
         </a>
       </div>
-
-      <!-- Lige -->
       <div class="result-group" *ngIf="filteredLeagues.length > 0">
         <div class="result-group-title">Lige</div>
-        <a class="result-item" *ngFor="let league of filteredLeagues" 
-           [routerLink]="['/leagues', league.id]" 
-           (click)="selectResult()">
+        <a class="result-item" *ngFor="let league of filteredLeagues"
+           [routerLink]="['/leagues', league.id]"
+           (click)="selectResult(); menuOpen = false">
           <img *ngIf="league.logoUrl" [src]="league.logoUrl" class="result-logo" alt="logo" (error)="league.logoUrl = ''"/>
           <div *ngIf="!league.logoUrl" class="result-placeholder">{{ league.name.charAt(0) }}</div>
           <div class="result-info">
@@ -61,12 +66,10 @@
           </div>
         </a>
       </div>
-
-      <!-- Igrači -->
       <div class="result-group" *ngIf="filteredPlayers.length > 0">
         <div class="result-group-title">Igrači</div>
-        <a class="result-item" *ngFor="let player of filteredPlayers" 
-           (click)="selectResult()">
+        <a class="result-item" *ngFor="let player of filteredPlayers"
+           (click)="selectResult(); menuOpen = false">
           <div class="result-placeholder">{{ getTeamInitials(player.name) }}</div>
           <div class="result-info">
             <div class="result-name">{{ player.name }}</div>
@@ -74,21 +77,24 @@
           </div>
         </a>
       </div>
-
       <div class="no-results" *ngIf="!hasResults">
         Nema rezultata za "{{ searchQuery }}"
       </div>
     </div>
   </div>
+</div>
 
-  <div class="nav-actions" *ngIf="!isLoggedIn">
-    <button class="btn-outline" routerLink="/login">Prijavi se</button>
-    <button class="btn-primary" routerLink="/register">Registruj se</button>
+  <div class="nav-actions" [class.open]="menuOpen" *ngIf="!isLoggedIn">
+  <div class="nav-actions-inner">
+    <button class="btn-outline" routerLink="/login" (click)="menuOpen = false">Prijavi se</button>
+    <button class="btn-primary" routerLink="/register" (click)="menuOpen = false">Registruj se</button>
   </div>
+</div>
 
-  <div class="nav-actions" *ngIf="isLoggedIn">
-    <a class="btn-outline" *ngIf="isAdmin" routerLink="/admin">Admin panel</a>
-    <div class="user-info" routerLink="/profile">
+  <div class="nav-actions" [class.open]="menuOpen" *ngIf="isLoggedIn">
+  <div class="nav-actions-inner">
+    <a class="btn-outline" *ngIf="isAdmin" routerLink="/admin" (click)="menuOpen = false">Admin panel</a>
+    <div class="user-info" routerLink="/profile" (click)="menuOpen = false">
       <div class="user-avatar">{{ userEmail.charAt(0).toUpperCase() }}</div>
       <span class="user-email">{{ userEmail }}</span>
     </div>
@@ -97,4 +103,5 @@
       Odjava
     </button>
   </div>
+</div>
 </nav>

@@ -242,3 +242,33 @@ app-footer {
   border-color: rgba(255, 170, 44, 0.4);
   color: #ffaa2c;
 }
+
+@media (max-width: 768px) {
+  .content {
+    padding: 20px 16px;
+    max-width: 100%;
+  }
+
+  .filter-bar {
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+
+  .filter-group {
+    max-width: 100%;
+  }
+
+  .filter-toggle {
+    justify-content: flex-start;
+  }
+
+  .toggle-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .leagues-grid {
+    grid-template-columns: 1fr;
+  }
+}

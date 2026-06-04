@@ -264,3 +264,24 @@
 .show-password-btn:active {
   background: rgba(0, 212, 170, 0.15);
 }
+
+
+@media (max-width: 768px) {
+  .page {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .left {
+    display: none;
+  }
+
+  .right {
+    width: 100%;
+    min-height: 100vh;
+    padding: 48px 24px;
+    align-items: flex-start;
+    padding-top: 60px;
+  }
+}

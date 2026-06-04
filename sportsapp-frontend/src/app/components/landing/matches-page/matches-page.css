@@ -275,3 +275,56 @@
   color: #00d4aa;
   transform: translateY(-50%) translateX(4px);
 }
+
+@media (max-width: 768px) {
+  .content {
+    padding: 20px 16px;
+    max-width: 100%;
+  }
+
+  .filter-bar {
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+
+  .filter-group {
+    max-width: 100%;
+  }
+
+  .mi-league {
+    display: none;
+  }
+
+  .match-item {
+    padding: 12px 12px;
+  }
+
+  .mi-scores {
+    margin-right: 10px;
+  }
+
+  .mi-status {
+    width: 50px;
+  }
+
+  .mi-time {
+    font-size: 10px;
+  }
+
+  .hint-banner {
+    font-size: 12px;
+    padding: 10px 14px;
+  }
+
+  .matches-tabs {
+    padding: 0 8px;
+    overflow-x: auto;
+  }
+
+  .mtab {
+    padding: 10px 12px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+}
