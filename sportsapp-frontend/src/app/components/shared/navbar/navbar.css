@@ -40,6 +40,12 @@
   gap: 28px;
 }
 
+.nav-links-inner {
+  display: flex;
+  gap: 28px;
+  align-items: center;
+}
+
 .nav-link {
   font-size: 14px;
   color: #6b7a8d;
@@ -55,6 +61,12 @@
 }
 
 .nav-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.nav-actions-inner {
   display: flex;
   gap: 10px;
   align-items: center;
@@ -303,12 +315,14 @@
 
 @media (max-width: 768px) {
   .nav {
-    padding: 0 16px;
+    padding: 0 16px !important;
     position: relative;
     flex-wrap: wrap;
     height: auto;
     min-height: 60px;
     align-items: center;
+    max-width: 100% !important;
+    margin: 0 !important;
   }
 
   .hamburger {
@@ -392,10 +406,4 @@
     width: 100%;
     justify-content: center;
   }
-
-  .nav {
-  max-width: 100% !important;
-  margin: 0 !important;
-  padding: 0 16px !important;
-}
 }
