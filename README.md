@@ -77,6 +77,7 @@ The application features role-based access control with JWT authentication, allo
 - **Global search** with live autocomplete grouped by entity type
 - **Sport-specific position grouping** (e.g., Goalkeeper → Defense → Midfield → Attack for football)
 - **Pagination support** on teams and players endpoints (Load more)
+- **Mobile responsive** — fully optimized for all screen sizes
 
 ### User Features (Authenticated)
 - **JWT-based authentication** with email and password
@@ -93,6 +94,7 @@ The application features role-based access control with JWT authentication, allo
 - **Sport-specific position mapping** when creating players
 - **Match validation** — enforces logical rules (e.g., a SCHEDULED match can't have scores, FINISHED can't be in the future)
 - **Automatic standings regeneration** after any match create/update/delete
+- **Mobile responsive** — fully optimized for all screen sizes
 
 ---
 
@@ -183,6 +185,8 @@ Frontend starts at `http://localhost:4200`.
 | Admin | admin@gmail.com | admin123 |
 | User | register a new account | — |
 
+### 5. Mobile
+The application is fully responsive and works on all screen sizes. Visit the live demo on your phone to see it in action.
 ---
 
 ## 🔮 Future Improvements
