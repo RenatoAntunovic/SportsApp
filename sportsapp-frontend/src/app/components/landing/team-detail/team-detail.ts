@@ -32,12 +32,17 @@ export class TeamDetail implements OnInit {
   ) {}
 
   ngOnInit() {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.route.params.subscribe (params=>{
+      const id = Number(params['id']);
     if (id) {
+      this.team = null;
+      this.players = [];
+      this.matches=[];
       this.loadTeam(id);
       this.loadPlayers(id);
       this.loadMatches(id);
     }
+  });
   }
 
   loadTeam(id: number) {
